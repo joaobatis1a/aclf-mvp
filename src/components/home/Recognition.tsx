@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { MaskText, Reveal } from "@/components/motion/Reveal";
+import PhotoColumns from "@/components/ui/PhotoColumns";
 import { awards } from "@/data/content";
 
 const seals = [
@@ -20,7 +21,7 @@ export default function Recognition() {
     <section aria-labelledby="reconhecimento" className="relative overflow-hidden bg-forest py-24 text-paper sm:py-36">
       <div aria-hidden className="pointer-events-none absolute -left-40 top-20 size-[40rem] rounded-full bg-paineira/10 blur-3xl" />
 
-      <div className="container-x relative grid items-end gap-6 lg:grid-cols-[auto_1fr] lg:gap-16">
+      <div className="container-x relative grid items-end gap-6 lg:grid-cols-[auto_1fr_auto] lg:gap-12">
         <p aria-hidden className="accent select-none text-[clamp(12rem,32vw,30rem)] leading-[0.75] text-paineira">5</p>
         <div className="pb-4 lg:pb-10">
           <p className="mono text-leaf">30º Troféu ADEMI-PE · Reconhecimento</p>
@@ -33,6 +34,17 @@ export default function Recognition() {
             Na maior premiação do mercado imobiliário pernambucano, o Mirante do Frio Residence levou o Troféu Master, o principal prêmio da noite. Vieram junto mais quatro.
           </p>
         </div>
+        <PhotoColumns
+          className="hidden h-[30rem] self-center lg:flex"
+          images={[
+            { src: "/images/company/award-master.jpg", alt: "" },
+            { src: "/images/company/award-esg.png", alt: "" },
+            { src: "/images/company/story.jpg", alt: "" },
+            { src: "/images/company/award-mcmv.jpg", alt: "" },
+            { src: "/images/company/award-coop.png", alt: "" },
+            { src: "/images/company/award-incontec.png", alt: "" },
+          ]}
+        />
       </div>
 
       {/* Expanding panels: the open one shows the story, the others stay as labelled strips. */}

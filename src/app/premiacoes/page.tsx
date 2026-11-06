@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
+import PhotoColumns from "@/components/ui/PhotoColumns";
 import { awards } from "@/data/content";
 
 export const metadata: Metadata = { title: "Premiações" };
@@ -9,7 +10,12 @@ export const metadata: Metadata = { title: "Premiações" };
 export default function PremiacoesPage() {
   return (
     <>
-      <PageHeader eyebrow="Empresa · Premiações" title="Cinco troféus" accent="numa noite" image="/images/company/award-master.jpg">
+      <PageHeader
+        eyebrow="Empresa · Premiações"
+        title="Cinco troféus"
+        accent="numa noite"
+        aside={<PhotoColumns className="hidden h-[28rem] justify-self-end lg:flex" images={awards.map((a) => ({ src: a.image, alt: "" })).concat({ src: "/images/company/story.jpg", alt: "" })} />}
+      >
         No 30º Troféu ADEMI-PE, a maior premiação do mercado imobiliário de Pernambuco, a empresa saiu com cinco reconhecimentos.
       </PageHeader>
       <section className="container-x space-y-24 pb-24 sm:space-y-32">
