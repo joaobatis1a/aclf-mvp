@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
-import { numbers } from "@/data/content";
+import CountUp from "@/components/company/CountUp";
+
+// The founding year is a date, not a quantity, so it does not count up.
+const numbers = [
+  { node: <span className="tabular-nums">1999</span>, label: "ano de fundação" },
+  { node: <CountUp to={18} suffix="+" />, label: "grandes empreendimentos" },
+  { node: <CountUp to={8} suffix=" mil" />, label: "unidades habitacionais" },
+  { node: <CountUp to={800} suffix=" mil m²" />, label: "de área construída" },
+];
 
 const TEXT =
   "Desde 1999 transformamos Paulista e o litoral norte de Pernambuco em lugar de morar bem. São mais de *18* grandes empreendimentos, *8 mil* unidades e *800 mil m²* construídos, com a mesma promessa: qualidade a preço justo.";
@@ -30,7 +38,7 @@ export default function Manifesto() {
         <dl className="mt-20 grid grid-cols-2 border-t border-line lg:grid-cols-4">
           {numbers.map((n) => (
             <div key={n.label} className="border-b border-line py-6 pr-4 lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0">
-              <dd className="display text-[clamp(2.4rem,5vw,4.5rem)] text-brand">{n.value}</dd>
+              <dd className="display whitespace-nowrap text-[clamp(2.2rem,4.4vw,4.2rem)] text-brand">{n.node}</dd>
               <dt className="mono mt-2 text-ink-soft">{n.label}</dt>
             </div>
           ))}
