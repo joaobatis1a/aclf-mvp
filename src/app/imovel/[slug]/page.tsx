@@ -7,6 +7,9 @@ import PropertyCard, { specsOf } from "@/components/PropertyCard";
 import { site } from "@/config/site";
 import { getProperty, phaseLabel, properties } from "@/data/properties";
 
+// Pages are fully prerendered via generateStaticParams, so blocking validation is unnecessary.
+export const instant = false;
+
 export function generateStaticParams() {
   return properties.map((p) => ({ slug: p.slug }));
 }

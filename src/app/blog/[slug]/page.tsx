@@ -6,6 +6,9 @@ import CtaBand from "@/components/CtaBand";
 import PostCard, { formatDate } from "@/components/PostCard";
 import { getPost, posts } from "@/data/content";
 
+// Pages are fully prerendered via generateStaticParams, so blocking validation is unnecessary.
+export const instant = false;
+
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }

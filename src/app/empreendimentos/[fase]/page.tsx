@@ -12,6 +12,9 @@ const intro: Record<Phase, string> = {
   portfolio: "Tudo o que já construímos e entregamos.",
 };
 
+// Pages are fully prerendered via generateStaticParams, so blocking validation is unnecessary.
+export const instant = false;
+
 export function generateStaticParams() {
   return phaseOrder.map((fase) => ({ fase }));
 }
