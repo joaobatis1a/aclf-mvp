@@ -35,7 +35,7 @@ export default async function FasePage({ params }: PageProps<"/empreendimentos/[
       </PageHeader>
       <div className="container-x pb-24">
         <Suspense fallback={<p className="mono text-ink-soft">Carregando empreendimentos…</p>}>
-          <PropertyExplorer initialPhase={phase} />
+          <PropertyExplorer phase={phase} />
         </Suspense>
       </div>
     </>

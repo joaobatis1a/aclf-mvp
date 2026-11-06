@@ -10,7 +10,7 @@ export default function EmpreendimentosPage() {
   return (
     <>
       <PageHeader eyebrow={`Empreendimentos · ${properties.length}`} title="Escolha onde" accent="a vida acontece">
-        Lançamentos, obras em andamento, imóveis prontos para morar e tudo o que já entregamos. Filtre ou troque para o índice.
+        Lançamentos, obras em andamento, imóveis prontos para morar e tudo o que já entregamos. Escolha a fase e refine por cidade ou quartos.
       </PageHeader>
       <div className="container-x pb-24">
         <Suspense fallback={<p className="mono text-ink-soft">Carregando empreendimentos…</p>}>
