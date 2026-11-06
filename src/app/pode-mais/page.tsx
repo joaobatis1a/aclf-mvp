@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CtaBand from "@/components/CtaBand";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = { title: "Pode+" };
@@ -28,7 +27,6 @@ export default function PodeMaisPage() {
           <Link href="/contato" className="mt-8 inline-block rounded-full bg-teal px-7 py-3.5 font-semibold transition hover:bg-teal-deep">Falar com um consultor</Link>
         </section>
       </div>
-      <CtaBand />
     </>
   );
 }

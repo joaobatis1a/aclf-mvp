@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import CtaBand from "@/components/CtaBand";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = { title: "Certificações e selos Caixa" };
@@ -37,7 +36,6 @@ export default function CertificacoesPage() {
           <strong>Graus do selo Casa Azul:</strong> Mirante do Frio Residence e Mirante dos Corais têm o nível Safira. O Vila do Frio Condomínio Clube tem o nível Topázio.
         </p>
       </div>
-      <CtaBand />
     </>
   );
 }

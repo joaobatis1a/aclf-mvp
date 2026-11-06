@@ -1,21 +1,45 @@
+import Image from "next/image";
+import { MaskText, Reveal } from "@/components/motion/Reveal";
+
 export default function PageHeader({
   eyebrow,
   title,
+  accent,
+  image,
   children,
 }: {
   eyebrow: string;
   title: string;
+  /** Optional second line rendered in the accent colour. */
+  accent?: string;
+  image?: string;
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-line bg-paper-deep/60">
-      <div aria-hidden className="pointer-events-none absolute -right-24 top-0 size-80 rounded-full bg-leaf/20 blur-3xl" />
-      <div className="container-x relative py-14 sm:py-20">
-        <p className="eyebrow">{eyebrow}</p>
-        <h1 className="mt-3 max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest sm:text-6xl">
-          {title}
-        </h1>
-        {children && <div className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">{children}</div>}
+    <section className="relative overflow-hidden bg-paper pb-14 pt-36 sm:pb-20 sm:pt-44">
+      <div className={`container-x grid gap-10 ${image ? "lg:grid-cols-[1.6fr_1fr] lg:items-end" : ""}`}>
+        <div>
+          <p className="mono text-teal-deep">{eyebrow}</p>
+          <h1 className="display mt-6 text-[clamp(3rem,9vw,9rem)] text-forest">
+            <MaskText text={title} />
+            {accent && (
+              <>
+                <br />
+                <MaskText text={accent} className="text-teal" delay={0.12} />
+              </>
+            )}
+          </h1>
+          {children && (
+            <Reveal delay={0.25} className="mt-8 max-w-2xl text-lg leading-relaxed text-ink-soft">
+              {children}
+            </Reveal>
+          )}
+        </div>
+        {image && (
+          <Reveal delay={0.15} className="arch relative hidden aspect-[3/4] lg:block">
+            <Image src={image} alt="" fill priority sizes="30vw" className="object-cover" />
+          </Reveal>
+        )}
       </div>
     </section>
   );
