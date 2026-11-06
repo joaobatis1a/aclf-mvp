@@ -13,32 +13,36 @@ export default function ContatoPage() {
   ];
   return (
     <>
-      <PageHeader eyebrow="Contato" title="Fale com a gente.">
+      <PageHeader eyebrow="Contato" title="Vamos" accent="conversar">
         Compra, pós-venda ou imprensa: escolha o canal mais rápido para você.
       </PageHeader>
-      <div className="container-x grid gap-10 py-16 lg:grid-cols-[1fr_1.3fr]">
-        <div className="space-y-6">
-          <ul className="space-y-3">
+      <section className="container-x grid gap-14 pb-24 lg:grid-cols-[1fr_1.2fr]">
+        <div>
+          <ul className="border-t border-line">
             {channels.map((c) => (
-              <li key={c.label}>
-                <a href={c.href} className="block rounded-2xl border border-line bg-white p-5 transition hover:border-teal">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-teal-deep">{c.label}</span>
-                  <span className="mt-1 block font-display text-2xl font-semibold">{c.value}</span>
+              <li key={c.label} className="border-b border-line">
+                <a href={c.href} className="group block py-6">
+                  <span className="mono text-teal-deep">{c.label}</span>
+                  <span className="display mt-2 block break-words text-[clamp(1.8rem,3.6vw,3.2rem)] text-forest transition group-hover:translate-x-2 group-hover:text-brand">
+                    {c.value}
+                  </span>
                 </a>
               </li>
             ))}
           </ul>
-          <div className="rounded-2xl bg-paper-deep p-5 text-sm leading-relaxed">
-            <p className="font-semibold">Horário de atendimento</p>
-            {site.hours.map((h) => (
-              <p key={h}>{h}</p>
-            ))}
-            <p className="mt-3 font-semibold">Endereço</p>
-            <p>{site.address}</p>
-          </div>
+          <dl className="mt-10 grid gap-6 sm:grid-cols-2">
+            <div>
+              <dt className="mono text-teal-deep">Horário</dt>
+              <dd className="mt-2 leading-relaxed">{site.hours.map((h) => <span key={h} className="block">{h}</span>)}</dd>
+            </div>
+            <div>
+              <dt className="mono text-teal-deep">Endereço</dt>
+              <dd className="mt-2 leading-relaxed">{site.address}</dd>
+            </div>
+          </dl>
         </div>
         <ContactForm />
-      </div>
+      </section>
     </>
   );
 }

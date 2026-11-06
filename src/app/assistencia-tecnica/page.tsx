@@ -1,69 +1,74 @@
 import type { Metadata } from "next";
+import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
 import { site } from "@/config/site";
 
 export const metadata: Metadata = { title: "Assistência técnica" };
 
-const checks = [
-  "O serviço ainda está dentro da garantia? Consulte a tabela do Manual do Proprietário.",
-  "As condições de garantia foram cumpridas, como as manutenções periódicas?",
-  "Houve reforma que alterou o projeto original? Trocar piso, danificar portas e janelas ou mexer nas instalações hidráulicas e elétricas faz perder a garantia.",
-  "As manutenções foram feitas por empresas especializadas, com ART? Danos causados por terceiros contratados não são cobertos.",
-];
-
-const rules = [
-  "Os reparos acontecem em dias úteis, em horário comercial, na data marcada.",
-  "Sem o proprietário ou um representante no local, não há visita nem reparo.",
-  "Chamado procedente recebe agendamento de vistoria e reparo.",
-  "Chamado improcedente, ou falta no horário agendado, gera taxa de R$ 100,00. Se faltar, o chamado é encerrado e você precisa abrir outro.",
+const steps = [
+  {
+    title: "Confira a garantia",
+    items: [
+      "O serviço ainda está dentro do prazo? Consulte a tabela do Manual do Proprietário.",
+      "As condições foram cumpridas, como as manutenções periódicas?",
+      "Houve reforma que alterou o projeto original? Trocar piso, danificar portas e janelas ou mexer nas instalações hidráulicas e elétricas faz perder a garantia.",
+      "As manutenções foram feitas por empresas especializadas, com ART? Danos causados por terceiros contratados não são cobertos.",
+    ],
+  },
+  {
+    title: "Abra o chamado",
+    items: [
+      "Use a plataforma de solicitação indicada pelo SAC do seu empreendimento, ou fale com o atendimento.",
+      "Cadastre assistenciatecnica@aclf.com.br como remetente seguro. Esse endereço só envia avisos automáticos de abertura, agendamento e encerramento.",
+    ],
+  },
+  {
+    title: "Receba a equipe",
+    items: [
+      "Chamado procedente recebe agendamento de vistoria e reparo, em dias úteis e horário comercial.",
+      "Sem o proprietário ou um representante no local, não há visita nem reparo.",
+      "Chamado improcedente, ou falta no horário agendado, gera taxa de R$ 100,00. Se faltar, o chamado é encerrado e é preciso abrir outro.",
+    ],
+  },
 ];
 
 export default function AssistenciaPage() {
   return (
     <>
-      <PageHeader eyebrow="Portal do cliente" title="Assistência técnica">
-        Antes de abrir um chamado, confira se o problema é de responsabilidade da construtora. Isso agiliza o atendimento.
+      <PageHeader eyebrow="Portal do cliente" title="Assistência" accent="técnica">
+        Três passos para um atendimento rápido. Antes de abrir o chamado, confira se o reparo é de responsabilidade da construtora.
       </PageHeader>
-      <div className="container-x grid gap-10 py-16 lg:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-12">
-          <section aria-labelledby="antes">
-            <h2 id="antes" className="font-display text-3xl font-semibold text-forest">1. Confira antes de abrir</h2>
-            <ul className="mt-6 space-y-3">
-              {checks.map((c) => (
-                <li key={c} className="flex gap-4 rounded-2xl bg-white p-5">
-                  <span className="mt-2 size-2.5 shrink-0 rounded-full bg-teal" aria-hidden />
-                  <span className="leading-relaxed">{c}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section aria-labelledby="regras">
-            <h2 id="regras" className="font-display text-3xl font-semibold text-forest">2. Como o atendimento funciona</h2>
-            <ul className="mt-6 space-y-3">
-              {rules.map((c) => (
-                <li key={c} className="border-b border-line pb-3 leading-relaxed">{c}</li>
-              ))}
-            </ul>
-          </section>
-        </div>
-        <aside className="h-fit rounded-[2rem] bg-forest p-8 text-white lg:sticky lg:top-32">
-          <h2 className="font-display text-3xl font-semibold">Abrir chamado</h2>
-          <p className="mt-3 text-white/75">
-            Use a plataforma de solicitação indicada pelo SAC do seu empreendimento ou fale com o atendimento.
-          </p>
-          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-full bg-teal px-6 py-3.5 text-center font-semibold hover:bg-teal-deep">
-            SAC no WhatsApp
+
+      <section className="container-x grid gap-14 pb-24 lg:grid-cols-[1.6fr_1fr]">
+        <ol className="space-y-6">
+          {steps.map((s, i) => (
+            <Reveal as="li" key={s.title} className="rounded-[2rem] bg-paper-deep p-8 sm:p-10">
+              <p className="mono text-teal-deep">Passo {i + 1} de {steps.length}</p>
+              <h2 className="display mt-3 text-[clamp(2.2rem,4vw,3.8rem)] text-forest">{s.title}</h2>
+              <ul className="mt-6 space-y-3">
+                {s.items.map((it) => (
+                  <li key={it} className="flex gap-4 leading-relaxed">
+                    <span className="mt-2.5 size-2 shrink-0 rounded-full bg-paineira" aria-hidden />
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
+        </ol>
+
+        <aside className="h-fit rounded-[2rem] bg-forest p-8 text-paper lg:sticky lg:top-28">
+          <p className="mono text-leaf">SAC</p>
+          <p className="display mt-4 text-5xl">Precisa de ajuda?</p>
+          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className="mt-7 block rounded-full bg-teal px-6 py-4 text-center font-semibold hover:bg-leaf text-forest">
+            WhatsApp {site.whatsappLabel}
           </a>
-          <p className="mt-6 text-sm text-white/70">
-            {site.phone} · {site.email}
-            <br />
-            {site.hours.join(" · ")}
-          </p>
-          <p className="mt-6 text-xs text-white/55">
-            O endereço assistenciatecnica@aclf.com.br só envia avisos automáticos. Cadastre-o como remetente seguro para receber a abertura, o agendamento e o encerramento do chamado.
-          </p>
+          <a href={site.phoneHref} className="mt-3 block rounded-full px-6 py-4 text-center ring-1 ring-line-inv hover:bg-paper hover:text-forest">
+            {site.phone}
+          </a>
+          <p className="mono mt-6 text-paper/60">{site.hours.join(" · ")}</p>
         </aside>
-      </div>
+      </section>
     </>
   );
 }
