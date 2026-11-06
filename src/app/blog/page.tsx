@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
 import PostCard from "@/components/PostCard";
-import { formatDate, posts } from "@/data/content";
+import { posts } from "@/data/content";
 
 export const metadata: Metadata = { title: "Blog" };
 
@@ -16,25 +13,18 @@ export default function BlogPage() {
         Plantas, localização, financiamento e vida em condomínio, explicados para quem está escolhendo onde morar.
       </PageHeader>
 
-      <section className="container-x pb-20">
-        <Link href={`/blog/${featured.slug}`} className="group grid items-end gap-8 lg:grid-cols-[1.4fr_1fr]">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] bg-paper-deep">
-            <Image src={featured.image} alt="" fill priority sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover transition duration-[1.2s] group-hover:scale-105" />
-          </div>
-          <div>
-            <p className="mono text-teal-deep">Mais recente · {formatDate(featured.date)}</p>
-            <h2 className="display mt-4 text-[clamp(2.4rem,4.4vw,4.4rem)] text-forest transition group-hover:text-brand">{featured.title}</h2>
-            <p className="mt-5 text-lg leading-relaxed text-ink-soft">{featured.excerpt}</p>
-          </div>
-        </Link>
+      <section aria-label="Artigo mais recente" className="container-x pb-6">
+        <p className="mono mb-4 text-ink-soft">Mais recente</p>
+        <PostCard post={featured} featured />
       </section>
 
-      <section aria-label="Outros artigos" className="container-x pb-24">
-        <ul className="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+      <section aria-label="Outros artigos" className="container-x pb-24 pt-8">
+        <p className="mono mb-4 text-ink-soft">Todos os artigos</p>
+        <ul className="grid gap-3 lg:grid-cols-2">
           {rest.map((p, i) => (
-            <Reveal as="li" key={p.slug} delay={(i % 3) * 0.06}>
+            <li key={p.slug} className="reveal min-w-0" style={{ animationDelay: `${i * 40}ms` }}>
               <PostCard post={p} />
-            </Reveal>
+            </li>
           ))}
         </ul>
       </section>
