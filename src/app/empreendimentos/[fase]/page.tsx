@@ -30,11 +30,11 @@ export default async function FasePage({ params }: PageProps<"/empreendimentos/[
   const phase = fase as Phase;
   return (
     <>
-      <PageHeader eyebrow="Empreendimentos" title={phaseLabel[phase] === "Entregue" ? "Portfólio" : phaseLabel[phase]}>
+      <PageHeader eyebrow="Empreendimentos" title={phase === "portfolio" ? "Portfólio" : phaseLabel[phase]}>
         {intro[phase]}
       </PageHeader>
-      <div className="container-x py-12">
-        <Suspense fallback={<p className="text-ink-soft">Carregando empreendimentos…</p>}>
+      <div className="container-x pb-24">
+        <Suspense fallback={<p className="mono text-ink-soft">Carregando empreendimentos…</p>}>
           <PropertyExplorer initialPhase={phase} />
         </Suspense>
       </div>
