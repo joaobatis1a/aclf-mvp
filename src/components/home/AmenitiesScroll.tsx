@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Real renders of the Mirante das Paineiras leisure areas.
 const items = [
-  { name: "Piscina", img: "/images/properties/mirante-paineiras-cover.jpg" },
+  { name: "Piscina", img: "/images/properties/mirante-paineiras-piscina.jpg" },
   { name: "Quadra", img: "/images/properties/mirante-paineiras-04.jpg" },
   { name: "Churrasqueira e convivência", img: "/images/properties/mirante-paineiras-05.jpg" },
   { name: "Pet place", img: "/images/properties/mirante-paineiras-06.jpg" },
