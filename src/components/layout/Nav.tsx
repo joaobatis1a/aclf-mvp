@@ -60,6 +60,9 @@ export default function Nav() {
   // The mobile menu remembers the page it was opened on, so navigating closes it.
   const [openOn, setOpenOn] = useState<string | null>(null);
   const open = openOn === pathname;
+  // Desktop dropdown, also tied to the page it was opened on so a navigation always closes it.
+  const [drop, setDrop] = useState<{ label: string; path: string } | null>(null);
+  const dropOpen = (label: string) => drop?.label === label && drop.path === pathname;
 
   useMotionValueEvent(scrollY, "change", (y) => setCompact(y > 40));
 
@@ -67,7 +70,11 @@ export default function Nav() {
     if (open) lenis?.stop();
     else lenis?.start();
     document.documentElement.style.overflow = open ? "hidden" : "";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenOn(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpenOn(null);
+      setDrop(null);
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, lenis]);
@@ -100,15 +107,26 @@ export default function Nav() {
           <nav aria-label="Principal" className="hidden lg:block">
             <ul className="flex items-center gap-1">
               {items.map((item) => (
-                <li key={item.label} className="group relative">
+                <li
+                  key={item.label}
+                  className="group relative"
+                  onMouseEnter={() => item.children && setDrop({ label: item.label, path: pathname })}
+                  onMouseLeave={() => setDrop(null)}
+                  onFocus={() => item.children && setDrop({ label: item.label, path: pathname })}
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDrop(null);
+                  }}
+                >
                   <Link
                     href={item.href}
+                    onClick={() => setDrop(null)}
+                    aria-expanded={item.children ? dropOpen(item.label) : undefined}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className={`relative flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition ${light ? "text-paper/80 hover:text-paper" : "text-ink/75 hover:text-ink"}`}
                   >
                     {item.label}
                     {item.children && (
-                      <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden className="opacity-60 transition duration-300 group-hover:rotate-180 group-focus-within:rotate-180">
+                      <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden className={`opacity-60 transition duration-300 ${dropOpen(item.label) ? "rotate-180" : ""}`}>
                         <path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                       </svg>
                     )}
@@ -118,11 +136,15 @@ export default function Nav() {
                     />
                   </Link>
                   {item.children && (
-                    <div className="invisible absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 pt-3 opacity-0 transition duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <div
+                      className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3 transition duration-300 ${
+                        dropOpen(item.label) ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"
+                      }`}
+                    >
                       <ul className="overflow-hidden rounded-[1.5rem] bg-paper p-2 text-ink shadow-[0_24px_60px_-20px_rgba(15,29,12,0.45)] ring-1 ring-line">
                         {item.children.map((c) => (
                           <li key={c.href + c.label}>
-                            <Link href={c.href} className="flex items-center justify-between gap-3 rounded-2xl px-4 py-3 transition hover:bg-paper-deep">
+                            <Link href={c.href} onClick={() => setDrop(null)} className="flex items-center justify-between gap-3 rounded-2xl px-4 py-3 transition hover:bg-paper-deep">
                               <span>
                                 <span className="block text-sm font-semibold">{c.label}</span>
                                 {c.hint && <span className="mono block text-ink-soft">{c.hint}</span>}
