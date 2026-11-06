@@ -1,41 +1,117 @@
 "use client";
 
 import { useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+
+type YTPlayer = {
+  mute: () => void;
+  playVideo: () => void;
+  destroy: () => void;
+};
+type YTNamespace = {
+  Player: new (
+    el: HTMLElement,
+    opts: {
+      videoId: string;
+      host?: string;
+      playerVars: Record<string, string | number>;
+      events: {
+        onReady?: (e: { target: YTPlayer }) => void;
+        onStateChange?: (e: { data: number; target: YTPlayer }) => void;
+      };
+    },
+  ) => YTPlayer;
+  PlayerState: { PLAYING: number; ENDED: number };
+};
+
+declare global {
+  interface Window {
+    YT?: YTNamespace;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+let apiPromise: Promise<YTNamespace> | null = null;
+function loadApi() {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  apiPromise ??= new Promise((resolve) => {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      prev?.();
+      resolve(window.YT!);
+    };
+    const s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api";
+    s.async = true;
+    document.head.appendChild(s);
+  });
+  return apiPromise;
+}
 
 /**
  * Plays an official film muted and looping behind content, cropped to cover its frame.
- * It fades in only once the player is ready, so whatever sits underneath (a reel of stills)
- * works as the poster and as the fallback. Skipped entirely for reduced-motion users.
+ * - It only becomes visible while the video is actually playing, so YouTube's poster,
+ *   title card and play button never show; if autoplay is blocked, the reel underneath stays.
+ * - The player is laid out at twice the size and scaled down, which makes YouTube pick
+ *   a sharper stream than it would for the visible size.
  */
 export default function YouTubeBackground({ id, title }: { id: string; title: string }) {
   const reduce = useReducedMotion();
-  const [ready, setReady] = useState(false);
+  const host = useRef<HTMLDivElement>(null);
+  const domId = useId();
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (reduce || !host.current) return;
+    let player: YTPlayer | null = null;
+    let cancelled = false;
+    const mount = document.createElement("div");
+    host.current.appendChild(mount);
+
+    loadApi().then((YT) => {
+      if (cancelled) return;
+      player = new YT.Player(mount, {
+        videoId: id,
+        host: "https://www.youtube-nocookie.com",
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          iv_load_policy: 3,
+          loop: 1,
+          playlist: id,
+          modestbranding: 1,
+          playsinline: 1,
+          rel: 0,
+        },
+        events: {
+          onReady: (e) => {
+            e.target.mute();
+            e.target.playVideo();
+          },
+          onStateChange: (e) => setPlaying(e.data === YT.PlayerState.PLAYING),
+        },
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      player?.destroy();
+      mount.remove();
+    };
+  }, [id, reduce]);
+
   if (reduce) return null;
 
-  const params = new URLSearchParams({
-    autoplay: "1",
-    mute: "1",
-    loop: "1",
-    playlist: id,
-    controls: "0",
-    playsinline: "1",
-    modestbranding: "1",
-    rel: "0",
-    iv_load_policy: "3",
-    disablekb: "1",
-  });
-
   return (
-    <div aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}>
-      <iframe
-        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.78vh] -translate-x-1/2 -translate-y-1/2 scale-[1.18]"
-        src={`https://www.youtube-nocookie.com/embed/${id}?${params}`}
+    <div aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700 ${playing ? "opacity-100" : "opacity-0"}`}>
+      <div
+        ref={host}
+        id={domId}
         title={title}
-        tabIndex={-1}
-        allow="autoplay; encrypted-media; picture-in-picture"
-        // The player paints its own title card for a moment; waiting hides that flash.
-        onLoad={() => setTimeout(() => setReady(true), 1800)}
+        className="absolute left-1/2 top-1/2 h-[max(200%,112.5vw)] w-[max(200%,355.56vh)] -translate-x-1/2 -translate-y-1/2 scale-[0.56] [&>iframe]:size-full"
       />
     </div>
   );
