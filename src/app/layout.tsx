@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Figtree, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Figtree, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
@@ -15,6 +15,13 @@ const bricolage = Bricolage_Grotesque({
 const figtree = Figtree({
   variable: "--font-figtree",
   subsets: ["latin"],
+});
+
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
@@ -33,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${bricolage.variable} ${figtree.variable} ${geistMono.variable}`}>
+    <html lang="pt-BR" className={`${bricolage.variable} ${figtree.variable} ${geistMono.variable} ${instrument.variable}`}>
       <body className="flex min-h-screen flex-col">
         <SmoothScroll>
           <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-paper focus:px-5 focus:py-3">

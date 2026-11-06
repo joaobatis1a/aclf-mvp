@@ -40,6 +40,7 @@
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
 html.lenis,
@@ -102,6 +103,31 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--teal-deep);
+}
+
+/* Accent: a serif italic word set inside the condensed display type */
+.accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: normal;
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+
+/* Slow camera drift for stills standing in for video */
+@media (prefers-reduced-motion: no-preference) {
+  .drift {
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from {
+      transform: scale(1.04) translate3d(-1%, 0, 0);
+    }
+    to {
+      transform: scale(1.12) translate3d(1.5%, -1.5%, 0);
+    }
+  }
 }
 
 /* Signature arch */
