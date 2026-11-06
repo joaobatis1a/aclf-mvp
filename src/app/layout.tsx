@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Big_Shoulders, Geist_Mono, Instrument_Serif, Schibsted_Grotesk } from "next/font/google";
+import { Big_Shoulders, Familjen_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
@@ -14,22 +14,17 @@ const display = Big_Shoulders({
   axes: ["opsz"],
 });
 
-// Body: an editorial grotesque with a little more character than the usual UI sans.
-const body = Schibsted_Grotesk({
+// Body: a Swedish grotesque with its own drawing (the "g", the "a"), easy to read at length.
+const body = Familjen_Grotesk({
   variable: "--font-body-face",
   subsets: ["latin", "latin-ext"],
 });
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// Labels and data: a technical mono, slightly condensed, like a drawing's title block.
+const mono = Martian_Mono({
+  variable: "--font-mono-face",
+  subsets: ["latin", "latin-ext"],
+  axes: ["wdth"],
 });
 
 export const metadata: Metadata = {
@@ -43,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${display.variable} ${body.variable} ${geistMono.variable} ${instrument.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body className="flex min-h-screen flex-col">
         <SmoothScroll>
           <VideoProvider>
