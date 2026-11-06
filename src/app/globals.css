@@ -1,17 +1,25 @@
 @import "tailwindcss";
 
+/*
+  Direction: "do mirante ao bairro".
+  Cal (cool lime-wash light), mata (deep forest), brand leaf green, sea teal,
+  and a sparing paineira-flower pink taken from the tree that names the neighbourhood.
+*/
 :root {
-  --paper: #f4f8ef;
-  --paper-deep: #e8f0df;
-  --ink: #14210f;
-  --ink-soft: #46563f;
-  --forest: #223a17;
+  --paper: #eef2e9;
+  --paper-deep: #e0e8d8;
+  --ink: #0f1d0c;
+  --ink-soft: #4b5a45;
+  --forest: #12230f;
+  --forest-2: #1b3216;
   --brand: #3d5f2c;
-  --leaf: #7aa653;
+  --leaf: #8db86a;
   --teal: #1ea69a;
-  --teal-deep: #0f7f75;
+  --teal-deep: #0e7c72;
   --navy: #303191;
-  --line: rgba(20, 33, 15, 0.12);
+  --paineira: #ec8fae;
+  --line: rgba(15, 29, 12, 0.14);
+  --line-inv: rgba(238, 242, 233, 0.16);
 }
 
 @theme inline {
@@ -20,38 +28,83 @@
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-forest: var(--forest);
+  --color-forest-2: var(--forest-2);
   --color-brand: var(--brand);
   --color-leaf: var(--leaf);
   --color-teal: var(--teal);
   --color-teal-deep: var(--teal-deep);
   --color-navy: var(--navy);
+  --color-paineira: var(--paineira);
   --color-line: var(--line);
+  --color-line-inv: var(--line-inv);
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-html {
-  scroll-behavior: smooth;
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--teal);
-  color: #fff;
+  background: var(--paineira);
+  color: var(--forest);
 }
 
 :focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* Signature: arched frame, like a window or a "mirante" */
+/* Display type: condensed, tight, big */
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 75, "opsz" 96;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+.display-soft {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 85, "opsz" 72;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Kept for inner pages */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+
+/* Signature arch */
 .arch {
   border-radius: 999px 999px 1.25rem 1.25rem;
   overflow: hidden;
@@ -61,27 +114,39 @@ body {
   overflow: hidden;
 }
 
-.eyebrow {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--teal-deep);
+.container-x {
+  width: min(100% - 2rem, 86rem);
+  margin-inline: auto;
+}
+@media (min-width: 640px) {
+  .container-x {
+    width: min(100% - 4rem, 86rem);
+  }
 }
 
-.container-x {
-  width: min(100% - 2rem, 78rem);
-  margin-inline: auto;
+.outline-text {
+  color: transparent !important;
+  -webkit-text-stroke: 1.5px var(--outline, var(--forest));
+}
+
+/* Marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 40s linear infinite;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
-    animation: reveal 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
   @keyframes reveal {
     from {
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(24px);
     }
     to {
       opacity: 1;
@@ -91,7 +156,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+  .marquee {
+    animation: none;
   }
 }
