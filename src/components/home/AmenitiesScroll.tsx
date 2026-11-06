@@ -25,12 +25,12 @@ export default function AmenitiesScroll() {
       <div className="container-x">
         <p className="mono text-teal-deep">Condomínio clube · Mirante das Paineiras</p>
         <h2 id="lazer" className="display mt-5 max-w-5xl text-[clamp(2.8rem,7.5vw,7.5rem)] text-forest">
-          O fim de semana <span className="text-teal-deep">começa no térreo</span>
+          O fim de semana <span className="accent text-teal-deep">começa no térreo</span>
         </h2>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
-            <div className="arch relative aspect-[4/5] lg:aspect-auto lg:h-full">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full">
               <AnimatePresence initial={false}>
                 <motion.div
                   key={items[active].img}
