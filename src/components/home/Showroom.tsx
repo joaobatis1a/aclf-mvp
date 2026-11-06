@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reel from "@/components/ui/Reel";
+import { useVideo } from "@/components/video/VideoPlayer";
 import { phaseDot, phaseLabel, properties, shotsOf, specList, type Phase } from "@/data/properties";
 
 const PHASES: Phase[] = ["lancamento", "em-construcao", "pronto-para-morar"];
@@ -15,6 +16,7 @@ const INTERVAL = 6500;
  */
 export default function Showroom() {
   const reduce = useReducedMotion();
+  const playVideo = useVideo();
   const [phase, setPhase] = useState<Phase | "all">("all");
   const list = useMemo(
     () => properties.filter((p) => p.phase !== "portfolio" && (phase === "all" || p.phase === phase)),
@@ -111,7 +113,17 @@ export default function Showroom() {
                           {s.v} {s.k === "Área" ? "" : s.k.toLowerCase()}
                         </span>
                       ))}
-                    <Link href={`/imovel/${current.slug}`} className="ml-auto inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-forest transition hover:bg-paineira">
+                    {current.videos?.[0] && (
+                      <button
+                        type="button"
+                        onClick={() => playVideo(current.videos!.find((v) => v.kind === "filme") ?? current.videos![0])}
+                        className="ml-auto inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ring-1 ring-white/40 backdrop-blur transition hover:bg-paper hover:text-forest"
+                      >
+                        <svg viewBox="0 0 24 24" className="size-4" aria-hidden><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg>
+                        {current.videos.some((v) => v.kind === "filme") ? "Assistir filme" : "Ver a obra"}
+                      </button>
+                    )}
+                    <Link href={`/imovel/${current.slug}`} className={`${current.videos?.[0] ? "" : "ml-auto "}inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-forest transition hover:bg-paineira`}>
                       Conhecer <span aria-hidden>→</span>
                     </Link>
                   </div>
