@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
+import LinkRows from "@/components/ui/LinkRows";
 
 export const metadata: Metadata = { title: "Políticas" };
 
@@ -17,24 +18,27 @@ const commitments = [
 export default function PoliticasPage() {
   return (
     <>
-      <PageHeader eyebrow="Políticas" title="Os compromissos que orientam cada obra." />
-      <div className="container-x py-16">
-        <section id="qualidade" aria-labelledby="qualidade-titulo" className="scroll-mt-32">
-          <h2 id="qualidade-titulo" className="font-display text-3xl font-semibold text-forest">Política de qualidade</h2>
-          <ol className="mt-8 grid gap-4 md:grid-cols-2">
-            {commitments.map((c, i) => (
-              <li key={c} className="flex gap-5 rounded-2xl bg-white p-6">
-                <span className="font-display text-3xl font-semibold text-teal">{i + 1}</span>
-                <span className="leading-relaxed">{c}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
-        <div className="mt-14 flex flex-wrap gap-3">
-          <Link href="/politica-de-privacidade" className="rounded-full border border-forest px-7 py-3.5 font-semibold text-forest hover:bg-forest hover:text-white">Política de privacidade</Link>
-          <Link href="/ouvidoria" className="rounded-full border border-forest px-7 py-3.5 font-semibold text-forest hover:bg-forest hover:text-white">Ouvidoria</Link>
-        </div>
-      </div>
+      <PageHeader eyebrow="Políticas" title="Sete" accent="compromissos">
+        A política de qualidade que orienta cada obra, do projeto à entrega.
+      </PageHeader>
+      <section id="qualidade" aria-label="Política de qualidade" className="container-x scroll-mt-32 pb-20">
+        <ul className="border-t border-line">
+          {commitments.map((c, i) => (
+            <Reveal as="li" key={c} delay={i * 0.03} className="grid gap-4 border-b border-line py-8 sm:grid-cols-[6rem_1fr] sm:items-baseline">
+              <span className="display text-5xl text-teal-deep" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
+              <p className="display-soft text-[clamp(1.4rem,2.6vw,2.4rem)] leading-tight text-forest">{c}</p>
+            </Reveal>
+          ))}
+        </ul>
+      </section>
+      <section className="container-x pb-24">
+        <LinkRows
+          rows={[
+            { title: "Privacidade", text: "Como tratamos os seus dados e como exercer os seus direitos.", href: "/politica-de-privacidade", cta: "Ler" },
+            { title: "Ouvidoria", text: "Canal confidencial para relatar condutas inadequadas.", href: "/ouvidoria", cta: "Acessar" },
+          ]}
+        />
+      </section>
     </>
   );
 }

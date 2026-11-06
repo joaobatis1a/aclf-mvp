@@ -13,26 +13,44 @@ const blocks = [
 export default function PrivacidadePage() {
   return (
     <>
-      <PageHeader eyebrow="Políticas" title="Política de privacidade">
-        Um resumo de como tratamos os seus dados. Este texto é um resumo para a proposta de redesign; vale o documento oficial da empresa.
+      <PageHeader eyebrow="Políticas" title="Privacidade">
+        Um resumo de como tratamos os seus dados. Vale o documento oficial da empresa.
       </PageHeader>
-      <div className="container-x max-w-4xl space-y-12 py-16">
-        {blocks.map((b) => (
-          <section key={b.title}>
-            <h2 className="font-display text-3xl font-semibold text-forest">{b.title}</h2>
-            <ul className="mt-5 space-y-3">
-              {b.items.map((i) => (
-                <li key={i} className="border-b border-line pb-3 leading-relaxed">{i}</li>
-              ))}
-            </ul>
+      <div className="container-x grid gap-14 pb-24 lg:grid-cols-[1fr_2fr]">
+        <nav aria-label="Nesta página" className="lg:sticky lg:top-28 lg:self-start">
+          <p className="mono text-teal-deep">Nesta página</p>
+          <ul className="mt-4 space-y-2">
+            {blocks.map((b, i) => (
+              <li key={b.title}>
+                <a href={`#p${i}`} className="display-soft text-2xl text-forest hover:text-brand">{b.title}</a>
+              </li>
+            ))}
+            <li>
+              <a href="#direitos" className="display-soft text-2xl text-forest hover:text-brand">Como exercer</a>
+            </li>
+          </ul>
+        </nav>
+        <div className="space-y-16">
+          {blocks.map((b, i) => (
+            <section key={b.title} id={`p${i}`} className="scroll-mt-28">
+              <h2 className="display text-[clamp(2.4rem,4.5vw,4rem)] text-forest">{b.title}</h2>
+              <ul className="mt-6 border-t border-line">
+                {b.items.map((it) => (
+                  <li key={it} className="border-b border-line py-4 text-lg leading-relaxed">{it}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+          <section id="direitos" className="scroll-mt-28 rounded-[2rem] bg-forest p-8 text-paper sm:p-10">
+            <h2 className="display text-4xl">Como exercer seus direitos</h2>
+            <p className="mt-4 text-lg leading-relaxed text-paper/80">
+              Envie um e-mail ao encarregado de dados informando o dado e o direito que quer exercer. Pediremos uma comprovação de identidade.
+            </p>
+            <a className="mt-6 inline-flex rounded-full bg-paper px-6 py-3.5 font-semibold text-forest hover:bg-paineira" href={`mailto:${site.dpoEmail}`}>
+              {site.dpoEmail}
+            </a>
           </section>
-        ))}
-        <section className="rounded-3xl bg-paper-deep p-8">
-          <h2 className="font-display text-2xl font-semibold text-forest">Como exercer seus direitos</h2>
-          <p className="mt-3 leading-relaxed">
-            Envie um e-mail para o encarregado de dados em <a className="font-semibold text-brand underline" href={`mailto:${site.dpoEmail}`}>{site.dpoEmail}</a> informando o dado e o direito que quer exercer. Pediremos uma comprovação de identidade.
-          </p>
-        </section>
+        </div>
       </div>
     </>
   );

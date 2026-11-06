@@ -1,38 +1,48 @@
 import type { Metadata } from "next";
+import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
 import { site } from "@/config/site";
 
 export const metadata: Metadata = { title: "Trabalhe conosco" };
 
 const reasons = [
-  { title: "Mais de 1.000 colaboradores", text: "Uma equipe grande, com obras e operações em vários estados." },
-  { title: "Liderança diversa", text: "Mais de 50% das posições de liderança são ocupadas por mulheres." },
-  { title: "Valores que se vivem", text: "Ética, mentalidade de dono, foco no cliente e a crença de que juntos somos mais fortes." },
+  { value: "1.000+", title: "colaboradores", text: "Uma equipe grande, com obras e operações em vários estados." },
+  { value: "50%+", title: "da liderança é feminina", text: "Mais da metade das posições de liderança é ocupada por mulheres." },
+  { value: "5", title: "valores no dia a dia", text: "Ética, mentalidade de dono, foco no cliente, empreendedorismo e a crença de que juntos somos mais fortes." },
 ];
 
 export default function TrabalheConoscoPage() {
   return (
     <>
-      <PageHeader eyebrow="Carreiras" title="Construa a sua carreira com a gente.">
-        As vagas abertas ficam em uma plataforma de atração de talentos do grupo.
+      <PageHeader eyebrow="Carreiras" title="Construa" accent="com a gente" image="/images/company/story.jpg">
+        As vagas abertas ficam na plataforma de atração de talentos do grupo.
       </PageHeader>
-      <div className="container-x py-16">
-        <ul className="grid gap-6 md:grid-cols-3">
-          {reasons.map((r) => (
-            <li key={r.title} className="rounded-3xl border border-line bg-white p-7">
-              <h2 className="font-display text-2xl font-semibold text-forest">{r.title}</h2>
+      <section className="container-x pb-16">
+        <dl className="grid border-t border-line md:grid-cols-3">
+          {reasons.map((r, i) => (
+            <Reveal key={r.title} delay={i * 0.08} className="border-b border-line py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0">
+              <dd className="display text-7xl text-brand">{r.value}</dd>
+              <dt className="display-soft mt-2 text-2xl text-forest">{r.title}</dt>
               <p className="mt-3 leading-relaxed text-ink-soft">{r.text}</p>
-            </li>
+            </Reveal>
           ))}
-        </ul>
-        <div className="mt-12 rounded-[2rem] bg-brand p-10 text-white">
-          <h2 className="font-display text-3xl font-semibold">Veja as vagas abertas</h2>
-          <p className="mt-3 max-w-xl text-white/80">O link abre a plataforma de vagas em uma nova aba.</p>
-          <a href={site.jobsUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block rounded-full bg-white px-8 py-4 font-semibold text-forest hover:bg-paper-deep">
-            Ver vagas
-          </a>
-        </div>
-      </div>
+        </dl>
+      </section>
+      <section className="container-x pb-24">
+        <a
+          href={site.jobsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex flex-col justify-between gap-8 rounded-[2.5rem] bg-forest p-8 text-paper transition hover:bg-brand sm:flex-row sm:items-end sm:p-14"
+        >
+          <span className="display text-[clamp(2.6rem,6vw,6rem)]">
+            Ver vagas <span className="text-paineira">abertas</span>
+          </span>
+          <span className="mono flex items-center gap-2">
+            Abre em nova aba <span aria-hidden className="text-2xl transition group-hover:translate-x-1 group-hover:-translate-y-1">↗</span>
+          </span>
+        </a>
+      </section>
     </>
   );
 }
