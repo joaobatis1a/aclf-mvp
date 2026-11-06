@@ -15,6 +15,7 @@ export const site = {
   ouvidoriaUrl: "https://forms.gle/AaemXfk8H5h2aMmJA",
   email: "contato@aclf.com.br",
   instagram: "https://www.instagram.com/aclfempreendimentos",
+  youtube: "https://www.youtube.com/@aclfempreendimentos",
   address: "Rodovia 15, km 16,5, nº 242, Centro, Paulista/PE · CEP 53401-445",
   hours: ["Segunda a quinta, 8h às 18h", "Sexta, 8h às 17h"],
   logo: "/images/brand/logo.png",

@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Thumbnails of the company's official YouTube videos.
+    remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }],
+  },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

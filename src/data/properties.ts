@@ -9,6 +9,14 @@ export const phaseLabel: Record<Phase, string> = {
 
 export const phaseOrder: Phase[] = ["lancamento", "em-construcao", "pronto-para-morar", "portfolio"];
 
+export type Video = {
+  /** YouTube video id from the company's official pages. */
+  id: string;
+  title: string;
+  /** "filme": launch or presentation film. "obra": construction progress update. */
+  kind: "filme" | "obra";
+}
+
 export type Property = {
   slug: string;
   name: string;
@@ -25,6 +33,8 @@ export type Property = {
   hero?: string;
   /** Optional short muted clip (mp4/webm in /public/videos). Falls back to the hero/cover image. */
   video?: string;
+  /** Official YouTube videos linked from the original site. */
+  videos?: Video[];
   gallery?: string[];
   floorPlan?: string;
   amenities?: string[];
@@ -91,6 +101,7 @@ export const properties: Property[] = [
   },
   {
     slug: "mirante-das-paineiras",
+    videos: [{ id: "QTZkSYNnvpQ", title: "Descubra o Mirante das Paineiras", kind: "filme" }],
     name: "Mirante das Paineiras",
     phase: "lancamento",
     city: "Paulista",
@@ -128,6 +139,7 @@ export const properties: Property[] = [
   },
   {
     slug: "boa-vista-boulevard",
+    videos: [{ id: "Fbts-RX5ASo", title: "Viva perto de tudo em Recife", kind: "filme" }, { id: "eQjnQ7N1ygI", title: "Vê como tá a nossa obra · dezembro de 2025", kind: "obra" }],
     name: "Boa Vista Boulevard",
     phase: "em-construcao",
     city: "Recife",
@@ -144,6 +156,7 @@ export const properties: Property[] = [
   },
   {
     slug: "star-concept",
+    videos: [{ id: "GZY6A5gQJgI", title: "Vê como tá a nossa obra · julho de 2026", kind: "obra" }],
     name: "Star Concept",
     phase: "em-construcao",
     city: "Caruaru",
@@ -159,6 +172,7 @@ export const properties: Property[] = [
   },
   {
     slug: "belem-boulevard",
+    videos: [{ id: "5q0SlMR3QqM", title: "Belém Boulevard: sucesso de vendas na zona norte do Recife", kind: "filme" }, { id: "Trc_CLWCd-k", title: "Vê como tá a nossa obra · março de 2026", kind: "obra" }],
     city: "Recife",
     name: "Belém Boulevard",
     phase: "em-construcao",
@@ -175,6 +189,7 @@ export const properties: Property[] = [
   },
   {
     slug: "mirante-dos-corais",
+    videos: [{ id: "LEjNU8UfEkQ", title: "Lançamento Mirante dos Corais", kind: "filme" }, { id: "xgvD-kx6j_4", title: "Vê como tá a nossa obra · agosto de 2025", kind: "obra" }],
     city: "Paulista",
     name: "Mirante dos Corais",
     phase: "pronto-para-morar",
@@ -191,6 +206,7 @@ export const properties: Property[] = [
   },
   {
     slug: "nova-torre-porto-antilhas",
+    videos: [{ id: "fGrua6eZbG4", title: "Vê como tá a nossa obra · abril de 2024", kind: "obra" }],
     city: "Paulista",
     name: "Nova Torre Porto Antilhas",
     phase: "pronto-para-morar",
@@ -204,19 +220,25 @@ export const properties: Property[] = [
     gallery: [img("porto-antilhas-01.jpg"), img("porto-antilhas-02.jpg"), img("porto-antilhas-03.jpg"), img("porto-antilhas-04.jpg"), img("porto-antilhas-05.jpg")],
     amenities: ["Piscina", "Quadra poliesportiva", "Campo gramado", "Playground", "Salão de festas equipado"],
   },
-  { slug: "mirante-do-frio-residence", name: "Mirante do Frio Residence", phase: "portfolio", summary: "Obra entregue. Rendeu à empresa o Troféu Master no 30º Troféu ADEMI-PE.", cover: img("mirante-frio-cover.png") },
-  { slug: "north-way-residence", name: "North Way Residence", phase: "portfolio", city: "Paulista", summary: "Obra entregue em Paulista.", cover: img("north-way-cover.png") },
-  { slug: "alameda-do-frio", name: "Alameda do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("alameda-frio-cover.png") },
-  { slug: "vila-do-frio", name: "Vila do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("vila-frio-cover.jpg") },
-  { slug: "jardins-do-frio", name: "Jardins do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("jardins-frio-cover.jpg") },
-  { slug: "paulista-north-way-shopping", name: "Paulista North Way Shopping", phase: "portfolio", city: "Paulista", summary: "Shopping center com cerca de 55 mil m² de área construída.", cover: img("shopping-cover.jpeg") },
-  { slug: "green-village", name: "Green Village", phase: "portfolio", summary: "Obra entregue.", cover: img("green-village-cover.jpg") },
+  { slug: "mirante-do-frio-residence",
+    videos: [{ id: "C-SmdWl_6Lg", title: "Vê como tá a nossa obra · abril de 2024", kind: "obra" }], name: "Mirante do Frio Residence", phase: "portfolio", summary: "Obra entregue. Rendeu à empresa o Troféu Master no 30º Troféu ADEMI-PE.", cover: img("mirante-do-frio-residence-photo.jpg") },
+  { slug: "north-way-residence",
+    videos: [{ id: "_TQ_hxSK4Fs", title: "Vê como tá a nossa obra · abril de 2024", kind: "obra" }], name: "North Way Residence", phase: "portfolio", city: "Paulista", summary: "Obra entregue em Paulista.", cover: img("north-way-cover.png") },
+  { slug: "alameda-do-frio",
+    videos: [{ id: "rMUuRigW9vY", title: "Vê como tá a nossa obra · dezembro de 2022", kind: "obra" }], name: "Alameda do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("alameda-frio-cover.png") },
+  { slug: "vila-do-frio",
+    videos: [{ id: "4PlP4VwKl8s", title: "Apresentação da área de lazer", kind: "filme" }], name: "Vila do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("vila-frio-cover.jpg") },
+  { slug: "jardins-do-frio",
+    videos: [{ id: "O7-yiF-O9NU", title: "Jardins do Frio · Nova Paulista", kind: "filme" }], name: "Jardins do Frio Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("jardins-frio-cover.jpg") },
+  { slug: "paulista-north-way-shopping",
+    videos: [{ id: "FbmaabMT1f0", title: "Paulista North Way Shopping", kind: "filme" }], name: "Paulista North Way Shopping", phase: "portfolio", city: "Paulista", summary: "Shopping center com cerca de 55 mil m² de área construída.", cover: img("paulista-north-way-shopping-photo.jpg") },
+  { slug: "green-village", name: "Green Village", phase: "portfolio", summary: "Obra entregue.", cover: img("green-village-photo.jpg") },
   { slug: "jardins-da-roseira", name: "Jardins da Roseira Condomínio Clube", phase: "portfolio", summary: "Obra entregue.", cover: img("jardins-roseira-cover.jpg") },
-  { slug: "park-jardins", name: "Park Jardins", phase: "portfolio", summary: "Obra entregue.", cover: img("park-jardins-cover.jpg") },
-  { slug: "porto-bahamas", name: "Porto Bahamas", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-bahamas-cover.jpg") },
-  { slug: "porto-athenas", name: "Porto Athenas", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-athenas-cover.jpg") },
-  { slug: "porto-nassau", name: "Porto Nassau", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-nassau-cover.jpg") },
-  { slug: "porto-caribe", name: "Porto Caribe", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-caribe-cover.jpg") },
+  { slug: "park-jardins", name: "Park Jardins", phase: "portfolio", summary: "Obra entregue.", cover: img("park-jardins-photo.jpg") },
+  { slug: "porto-bahamas", name: "Porto Bahamas", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-bahamas-photo.jpg") },
+  { slug: "porto-athenas", name: "Porto Athenas", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-athenas-photo.jpg") },
+  { slug: "porto-nassau", name: "Porto Nassau", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-nassau-photo.jpg") },
+  { slug: "porto-caribe", name: "Porto Caribe", phase: "portfolio", summary: "Obra entregue.", cover: img("porto-caribe-photo.jpg") },
 ];
 
 export const getProperty = (slug: string) => properties.find((p) => p.slug === slug);
