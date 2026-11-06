@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Gallery from "@/components/Gallery";
 import { Reveal } from "@/components/motion/Reveal";
-import PropertyCard from "@/components/PropertyCard";
+import PropertyTile from "@/components/PropertyTile";
 import DetailHero from "@/components/property/DetailHero";
 import StickyContact from "@/components/property/StickyContact";
 import VideoSection from "@/components/property/VideoSection";
@@ -162,7 +162,7 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
           <ul className="mt-10 grid gap-4 lg:grid-cols-2">
             {related.map((r) => (
               <li key={r.slug} className="min-w-0">
-                <PropertyCard property={r} />
+                <PropertyTile property={r} />
               </li>
             ))}
           </ul>

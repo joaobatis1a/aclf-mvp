@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import PropertyCard from "./PropertyCard";
+import PanelRow from "./PanelRow";
+import PropertyTile from "./PropertyTile";
 import { cities, phaseDot, phaseLabel, phaseOrder, properties, type Phase } from "@/data/properties";
+
+const chunk = <T,>(arr: T[], n: number) => Array.from({ length: Math.ceil(arr.length / n) }, (_, i) => arr.slice(i * n, i * n + n));
 
 const select =
   "rounded-full bg-paper px-4 py-2.5 text-sm font-medium ring-1 ring-line outline-none transition hover:ring-forest focus-visible:ring-teal";
@@ -102,13 +105,24 @@ export default function PropertyExplorer({ phase }: { phase?: Phase }) {
           </button>
         </div>
       ) : (
-        <ul className="mt-8 grid gap-4 lg:grid-cols-2">
-          {list.map((p, i) => (
-            <li key={p.slug} className="reveal min-w-0" style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
-              <PropertyCard property={p} priority={i < 4} />
-            </li>
-          ))}
-        </ul>
+        <>
+          {/* Desktop: rows of expanding photo panels */}
+          <div className="mt-8 hidden space-y-3 lg:block">
+            {chunk(list, 4).map((row, r) => (
+              <div key={row.map((p) => p.slug).join()} className="reveal" style={{ animationDelay: `${r * 60}ms` }}>
+                <PanelRow items={row} priority={r === 0} />
+              </div>
+            ))}
+          </div>
+          {/* Small screens: full-photo cards */}
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:hidden">
+            {list.map((p, i) => (
+              <li key={p.slug} className="min-w-0">
+                <PropertyTile property={p} priority={i < 2} />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
