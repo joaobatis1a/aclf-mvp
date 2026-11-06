@@ -1,23 +1,30 @@
-import AwardsTeaser from "@/components/AwardsTeaser";
-import BairroParque from "@/components/BairroParque";
-import BlogTeaser from "@/components/BlogTeaser";
-import CtaBand from "@/components/CtaBand";
-import Hero from "@/components/Hero";
-import Numbers from "@/components/Numbers";
-import PhaseShowcase from "@/components/PhaseShowcase";
-import PortfolioStrip from "@/components/PortfolioStrip";
+import AmenitiesScroll from "@/components/home/AmenitiesScroll";
+import HeroWindow from "@/components/home/HeroWindow";
+import Journal from "@/components/home/Journal";
+import Manifesto from "@/components/home/Manifesto";
+import PortfolioIndex from "@/components/home/PortfolioIndex";
+import ProjectsRail from "@/components/home/ProjectsRail";
+import Recognition from "@/components/home/Recognition";
+import SearchBand from "@/components/home/SearchBand";
+import Trajectory from "@/components/home/Trajectory";
 
+/*
+  Narrative: open the window (hero) → who we are (manifesto) → where you can live (projects)
+  → what living there feels like (amenities) → find yours (search) → how we got here (trajectory)
+  → proof (portfolio, recognition) → keep learning (journal) → talk to us (footer).
+*/
 export default function Home() {
   return (
     <>
-      <Hero />
-      <PhaseShowcase />
-      <BairroParque />
-      <Numbers />
-      <PortfolioStrip />
-      <AwardsTeaser />
-      <BlogTeaser />
-      <CtaBand />
+      <HeroWindow />
+      <Manifesto />
+      <ProjectsRail />
+      <AmenitiesScroll />
+      <SearchBand />
+      <Trajectory />
+      <PortfolioIndex />
+      <Recognition />
+      <Journal />
     </>
   );
 }
