@@ -5,8 +5,9 @@ import { useState } from "react";
 import { cities, phaseLabel, phaseOrder } from "@/data/properties";
 
 const selectCls =
-  "mx-1 inline-block max-w-full cursor-pointer appearance-none border-0 border-b-2 border-teal bg-transparent px-1 pb-0.5 pr-6 font-display font-semibold text-brand outline-none transition hover:bg-teal/10 focus-visible:bg-teal/10";
+  "mx-1 inline-block max-w-full cursor-pointer appearance-none rounded-lg border-0 border-b-[3px] border-teal bg-transparent px-1 text-teal-deep outline-none transition hover:bg-teal/10 focus-visible:bg-teal/10";
 
+/** The search reads as a sentence the visitor completes. */
 export default function SentenceSearch() {
   const router = useRouter();
   const [bedrooms, setBedrooms] = useState("");
@@ -23,16 +24,12 @@ export default function SentenceSearch() {
   }
 
   return (
-    <form
-      onSubmit={go}
-      className="rounded-[2rem] border border-line bg-white/90 p-6 shadow-2xl shadow-forest/10 backdrop-blur sm:p-8"
-      aria-label="Buscar imóveis"
-    >
-      <p className="font-display text-2xl leading-[2.2] text-ink sm:text-3xl sm:leading-[2.1]">
+    <form onSubmit={go} aria-label="Buscar imóveis" className="rounded-[2rem] bg-paper p-6 ring-1 ring-line sm:p-10">
+      <p className="display-soft text-[clamp(1.7rem,3.4vw,3rem)] leading-[1.5] text-forest">
         Quero um apê com
         <label className="sr-only" htmlFor="q-quartos">Quartos</label>
         <select id="q-quartos" value={bedrooms} onChange={(e) => setBedrooms(e.target.value)} className={selectCls}>
-          <option value="">qualquer nº de</option>
+          <option value="">2 ou 3</option>
           <option value="2">2</option>
           <option value="3">3</option>
         </select>
@@ -54,15 +51,9 @@ export default function SentenceSearch() {
         </select>
         .
       </p>
-      <div className="mt-6 flex flex-wrap items-center gap-4">
-        <button
-          type="submit"
-          className="rounded-full bg-brand px-8 py-3.5 font-semibold text-white transition hover:bg-forest"
-        >
-          Ver empreendimentos
-        </button>
-        <span className="text-sm text-ink-soft">Mais filtros na página de empreendimentos.</span>
-      </div>
+      <button type="submit" className="mt-8 inline-flex items-center gap-3 rounded-full bg-forest px-8 py-4 font-semibold text-paper transition hover:bg-brand">
+        Ver empreendimentos <span aria-hidden>→</span>
+      </button>
     </form>
   );
 }
