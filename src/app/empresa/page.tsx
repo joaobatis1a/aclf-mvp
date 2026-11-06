@@ -33,13 +33,13 @@ export default function EmpresaPage() {
       <section aria-label="Números" className="px-3 sm:px-5">
         <dl className="grid overflow-hidden rounded-[2.5rem] bg-forest text-paper sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { node: <CountUp to={1999} format={false} />, label: "ano em que tudo começou" },
+            { node: <span className="tabular-nums">1999</span>, label: "ano em que tudo começou" },
             { node: <CountUp to={18} suffix="+" />, label: "grandes empreendimentos" },
             { node: <CountUp to={8000} />, label: "unidades habitacionais" },
             { node: <CountUp to={800} suffix=" mil m²" />, label: "de área construída" },
           ].map((n, i) => (
             <div key={n.label} className={`px-8 py-12 ${i > 0 ? "border-t border-line-inv sm:border-l sm:border-t-0" : ""} ${i === 2 ? "sm:border-l-0 sm:border-t lg:border-l lg:border-t-0" : ""} ${i === 3 ? "sm:border-t lg:border-t-0" : ""}`}>
-              <dd className="display text-[clamp(3rem,5vw,5rem)] text-paineira">{n.node}</dd>
+              <dd className="display whitespace-nowrap text-[clamp(2.6rem,4.4vw,4.6rem)] text-paineira">{n.node}</dd>
               <dt className="mono mt-3 text-paper/60">{n.label}</dt>
             </div>
           ))}
@@ -114,7 +114,7 @@ export default function EmpresaPage() {
         </h2>
         <div className="mt-14 grid gap-4 lg:grid-cols-3">
           <Reveal className="relative min-h-[26rem] overflow-hidden rounded-[2rem] text-paper lg:col-span-2">
-            <Image src="/images/properties/shopping-cover.jpeg" alt="Paulista North Way Shopping" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
+            <Image src="/images/properties/paulista-north-way-shopping-photo.jpg" alt="Paulista North Way Shopping" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-8">
               <p className="mono text-paineira">Paulista North Way Shopping</p>
