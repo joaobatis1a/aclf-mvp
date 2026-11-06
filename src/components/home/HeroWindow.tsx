@@ -9,6 +9,7 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
+  type MotionValue,
 } from "motion/react";
 import { useEffect, useRef } from "react";
 import Reel from "@/components/ui/Reel";
@@ -67,18 +68,6 @@ export default function HeroWindow() {
       className="relative h-[260vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
-        <h1 id="hero-title" className="display pointer-events-none absolute inset-0 flex flex-col justify-between px-4 pb-[6svh] pt-[13svh] text-forest sm:px-8">
-          <motion.span style={{ x: lineUpX, opacity: linesOpacity }} className="block overflow-hidden text-[clamp(3rem,10.5vw,11rem)]">
-            <motion.span className="block" variants={rise} initial="hidden" animate="show" transition={{ duration: 1.1, ease: [0.2, 0.8, 0.2, 1] }}>
-              Um bairro-parque
-            </motion.span>
-          </motion.span>
-          <motion.span style={{ x: lineDownX, opacity: linesOpacity }} className="block self-end overflow-hidden text-right text-[clamp(3rem,10.5vw,11rem)]">
-            <motion.span className="block" variants={rise} initial="hidden" animate="show" transition={{ duration: 1.1, delay: 0.12, ease: [0.2, 0.8, 0.2, 1] }}>
-              <span className="text-teal-deep">inteiro</span> em volta
-            </motion.span>
-          </motion.span>
-        </h1>
 
         <motion.div style={{ opacity: hintOpacity }} className="mono absolute left-4 top-[calc(13svh+clamp(3rem,10.5vw,11rem))] mt-3 hidden max-w-[14rem] text-ink-soft sm:left-8 sm:block">
           Paulista · Recife · Caruaru
@@ -89,14 +78,19 @@ export default function HeroWindow() {
           Role para abrir a janela ↓
         </motion.p>
 
-        {/* The window sits above the headline, so opening it covers the words. */}
+        {/* Two copies of the headline: dark on the paper, white inside the window (same clip), so the words stay whole and legible over the film. */}
+        <HeroTitle id="hero-title" className="text-forest" lineUpX={lineUpX} lineDownX={lineDownX} opacity={linesOpacity} />
+
         <motion.div className="absolute inset-0 will-change-[clip-path]" style={{ clipPath: clip }}>
           <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
             <Reel images={SHOTS} video={VIDEO} alt="Imagens do Paineiras Bairro-Parque" priority sizes="100vw" shot={3200} />
             {FILM && <YouTubeBackground id={FILM.id} title={FILM.title} />}
           </motion.div>
           <motion.div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/40 to-forest/10" style={{ opacity: shade }} />
+          <div className="absolute inset-0 bg-forest/15" aria-hidden />
+          <HeroTitle className="text-paper" lineUpX={lineUpX} lineDownX={lineDownX} opacity={linesOpacity} hidden />
         </motion.div>
+
 
         <motion.div style={{ y: captionY, opacity: captionOpacity }} className="absolute inset-x-0 bottom-0 text-paper">
           <div className="container-x grid gap-8 pb-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
@@ -123,6 +117,38 @@ export default function HeroWindow() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+function HeroTitle({
+  id,
+  className,
+  lineUpX,
+  lineDownX,
+  opacity,
+  hidden = false,
+}: {
+  id?: string;
+  className: string;
+  lineUpX: MotionValue<string>;
+  lineDownX: MotionValue<string>;
+  opacity: MotionValue<number>;
+  hidden?: boolean;
+}) {
+  const Tag = hidden ? "div" : "h1";
+  return (
+    <Tag id={id} aria-hidden={hidden || undefined} className={`display pointer-events-none absolute inset-0 flex flex-col justify-between px-4 pb-[6svh] pt-[13svh] sm:px-8 ${className}`}>
+      <motion.span style={{ x: lineUpX, opacity }} className="block overflow-hidden text-[clamp(3rem,10.5vw,11rem)]">
+        <motion.span className="block" variants={rise} initial="hidden" animate="show" transition={{ duration: 1.1, ease: [0.2, 0.8, 0.2, 1] }}>
+          Um bairro-parque
+        </motion.span>
+      </motion.span>
+      <motion.span style={{ x: lineDownX, opacity }} className="block self-end overflow-hidden text-right text-[clamp(3rem,10.5vw,11rem)]">
+        <motion.span className="block" variants={rise} initial="hidden" animate="show" transition={{ duration: 1.1, delay: 0.12, ease: [0.2, 0.8, 0.2, 1] }}>
+          <span className="accent">inteiro</span> em volta
+        </motion.span>
+      </motion.span>
+    </Tag>
   );
 }
 
