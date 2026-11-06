@@ -2,9 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { byPhase, type Property } from "@/data/properties";
 
+// Covers re-sourced in high resolution can be shown wide; the rest stay portrait so they keep their sharpness.
+const isWide = (p: Property) => p.cover.endsWith("-photo.jpg");
+
 /**
  * Delivered projects as two endless belts running in opposite directions.
- * Hovering or focusing a belt pauses it and lifts the card under the pointer.
+ * Hovering a belt pauses it and dims the other cards so the one under the pointer stands out.
  */
 export default function PortfolioIndex() {
   const list = byPhase("portfolio");
@@ -20,12 +23,15 @@ export default function PortfolioIndex() {
             Chaves <span className="accent text-teal-deep">entregues</span>
           </h2>
         </div>
-        <Link href="/empreendimentos/portfolio" className="rounded-full border border-forest px-7 py-3.5 font-semibold text-forest transition hover:bg-forest hover:text-paper">
-          Ver portfólio completo
-        </Link>
+        <div className="flex flex-col items-start gap-4 sm:items-end">
+          <p className="max-w-xs text-ink-soft sm:text-right">Condomínios, residenciais e um shopping que já fazem parte da paisagem de Paulista e região.</p>
+          <Link href="/empreendimentos/portfolio" className="rounded-full border border-forest px-7 py-3.5 font-semibold text-forest transition hover:bg-forest hover:text-paper">
+            Ver portfólio completo
+          </Link>
+        </div>
       </div>
 
-      <div className="mt-14 space-y-5">
+      <div className="mt-14 space-y-4">
         {rows.map((row, r) => (
           <Belt key={r} items={row} reverse={r === 1} />
         ))}
@@ -38,28 +44,38 @@ function Belt({ items, reverse }: { items: Property[]; reverse: boolean }) {
   // Repeat the set so the loop never shows a gap; only the first copy is reachable by keyboard.
   const copies = [items, items, items, items];
   return (
-    <div className="belt group/belt relative">
+    <div className="group/belt relative">
       <ul
-        className={`marquee flex w-max gap-5 group-hover/belt:[animation-play-state:paused] group-focus-within/belt:[animation-play-state:paused] motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 ${reverse ? "[animation-direction:reverse]" : ""}`}
-        style={{ animationDuration: `${items.length * 9}s` }}
+        className={`marquee flex w-max gap-4 group-hover/belt:[animation-play-state:paused] group-focus-within/belt:[animation-play-state:paused] motion-reduce:w-full motion-reduce:overflow-x-auto motion-reduce:px-4 ${reverse ? "[animation-direction:reverse]" : ""}`}
+        style={{ animationDuration: `${items.length * 11}s` }}
       >
         {copies.flatMap((set, c) =>
           set.map((p) => (
-            <li key={`${c}-${p.slug}`} aria-hidden={c > 0 || undefined} className="w-[17rem] shrink-0 sm:w-[22rem]">
+            <li key={`${c}-${p.slug}`} aria-hidden={c > 0 || undefined} className={`shrink-0 ${isWide(p) ? "w-[22rem] sm:w-[30rem]" : "w-[15rem] sm:w-[19rem]"}`}>
               <Link
                 href={`/imovel/${p.slug}`}
                 tabIndex={c > 0 ? -1 : undefined}
-                className="group/card relative block aspect-[4/5] overflow-hidden rounded-[2rem] transition duration-500 group-hover/belt:opacity-60 hover:!opacity-100"
+                className="group/card relative block h-[19rem] overflow-hidden rounded-[1.75rem] bg-paper-deep transition duration-500 group-hover/belt:opacity-50 hover:!opacity-100 sm:h-[23rem]"
               >
-                <Image src={p.cover} alt={c > 0 ? "" : p.name} fill sizes="22rem" className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-paper">
-                  <p className="mono text-paper/70">{p.city ?? "Entregue"}</p>
-                  <p className="display mt-1 text-3xl leading-[0.9] sm:text-4xl">{p.name}</p>
+                <Image src={p.cover} alt={c > 0 ? "" : p.name} fill sizes={isWide(p) ? "30rem" : "19rem"} className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/5 to-transparent" />
+                {p.videos?.length ? (
+                  <span className="mono absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-paper/90 px-3 py-1.5 text-forest">
+                    <svg viewBox="0 0 24 24" className="size-3" aria-hidden>
+                      <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
+                    </svg>
+                    Vídeo
+                  </span>
+                ) : null}
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 text-paper">
+                  <div className="min-w-0">
+                    <p className="mono text-paper/70">{p.city ?? "Pernambuco"} · entregue</p>
+                    <p className="display mt-1 text-2xl leading-[0.92] sm:text-3xl">{p.name}</p>
+                  </div>
+                  <span className="grid size-10 shrink-0 translate-y-2 place-items-center rounded-full bg-paper text-forest opacity-0 transition duration-300 group-hover/card:translate-y-0 group-hover/card:opacity-100" aria-hidden>
+                    →
+                  </span>
                 </div>
-                <span className="absolute right-5 top-5 grid size-11 scale-75 place-items-center rounded-full bg-paper text-forest opacity-0 transition duration-500 group-hover/card:scale-100 group-hover/card:opacity-100" aria-hidden>
-                  ↗
-                </span>
               </Link>
             </li>
           )),
