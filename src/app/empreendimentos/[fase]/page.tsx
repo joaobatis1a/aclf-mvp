@@ -30,7 +30,7 @@ export default async function FasePage({ params }: PageProps<"/empreendimentos/[
   const phase = fase as Phase;
   return (
     <>
-      <PageHeader eyebrow="Empreendimentos" title={phase === "portfolio" ? "Portfólio" : phaseLabel[phase]}>
+      <PageHeader compact eyebrow="Empreendimentos" title={phase === "portfolio" ? "Portfólio" : phaseLabel[phase]}>
         {intro[phase]}
       </PageHeader>
       <div className="container-x pb-24">

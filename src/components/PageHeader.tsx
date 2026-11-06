@@ -7,6 +7,7 @@ export default function PageHeader({
   accent,
   image,
   aside,
+  compact = false,
   children,
 }: {
   eyebrow: string;
@@ -16,14 +17,16 @@ export default function PageHeader({
   image?: string;
   /** Replaces the image column with custom content. */
   aside?: React.ReactNode;
+  /** Shorter header for listing pages, so results show above the fold. */
+  compact?: boolean;
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-paper pb-14 pt-36 sm:pb-20 sm:pt-44">
+    <section className={`relative overflow-hidden bg-paper ${compact ? "pb-8 pt-32 sm:pt-36" : "pb-14 pt-36 sm:pb-20 sm:pt-44"}`}>
       <div className={`container-x grid gap-10 ${image || aside ? "lg:grid-cols-[1.6fr_1fr] lg:items-end" : ""}`}>
         <div>
           <p className="mono text-teal-deep">{eyebrow}</p>
-          <h1 className="display mt-6 text-[clamp(3rem,9vw,9rem)] text-forest">
+          <h1 className={`display mt-6 text-forest ${compact ? "text-[clamp(2.8rem,6vw,5.5rem)]" : "text-[clamp(3rem,9vw,9rem)]"}`}>
             <MaskText text={title} />
             {accent && (
               <>
@@ -33,7 +36,7 @@ export default function PageHeader({
             )}
           </h1>
           {children && (
-            <Reveal delay={0.25} className="mt-8 max-w-2xl text-lg leading-relaxed text-ink-soft">
+            <Reveal delay={0.25} className={`max-w-2xl text-lg leading-relaxed text-ink-soft ${compact ? "mt-4" : "mt-8"}`}>
               {children}
             </Reveal>
           )}
