@@ -38,3 +38,22 @@ export const numbers = [
   { value: "8 mil", label: "unidades habitacionais" },
   { value: "800 mil m²", label: "de área construída" },
 ];
+
+export const timeline = [
+  { year: "1999", text: "Fundação, para conduzir a requalificação urbana de Paulista e do litoral norte de Pernambuco." },
+  { year: "Grupo", text: "A empresa passa a integrar um grupo com a fazenda Camarave e o Paulista North Way Shopping." },
+  { year: "NDT 1", text: "Primeira empresa do estado com a certificação NDT 1, além de ISO 9001:2015, PBQP-H nível A e Selo Casa Azul + Caixa." },
+  { year: "ADEMI", text: "Troféu Master no 30º Troféu ADEMI-PE pelo Mirante do Frio Residence, e mais quatro prêmios." },
+  { year: "2026", text: "Lançamento do Paineiras Bairro-Parque, o primeiro bairro-parque de Pernambuco." },
+];
+
+export const certifications = [
+  "ISO 9001:2015",
+  "PBQP-H SIAC Nível A",
+  "NDT-I Caixa",
+  "Selo Casa Azul + Caixa",
+  "Troféu Master ADEMI-PE",
+];
+
+export const formatDate = (iso: string) =>
+  new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(iso));
