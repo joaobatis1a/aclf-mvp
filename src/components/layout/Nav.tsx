@@ -19,6 +19,13 @@ const previews: Record<string, string> = {
 
 const ease = [0.7, 0, 0.2, 1] as const;
 
+const quick = [
+  { label: "Empreendimentos", href: "/empreendimentos" },
+  { label: "Empresa", href: "/empresa" },
+  { label: "Blog", href: "/blog" },
+  { label: "Portal do cliente", href: "/portal-do-cliente" },
+];
+
 export default function Nav() {
   const pathname = usePathname();
   const lenis = useLenis();
@@ -33,9 +40,12 @@ export default function Nav() {
   };
   const [hover, setHover] = useState("Empreendimentos");
 
+  const [compact, setCompact] = useState(false);
+
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
     setHidden(y > 160 && y > prev);
+    setCompact(y > 40);
   });
 
   useEffect(() => {
@@ -50,45 +60,64 @@ export default function Nav() {
   return (
     <>
       <motion.header
-        className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4"
-        animate={{ y: hidden && !open ? "-120%" : "0%" }}
+        className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4"
+        animate={{ y: hidden && !open ? "-130%" : "0%" }}
         transition={{ duration: 0.5, ease }}
       >
-        <div className="flex items-center justify-between gap-3">
-          <Link
-            href="/"
-            aria-label={`${site.name}, página inicial`}
-            className="flex h-14 items-center rounded-full bg-paper/85 px-5 shadow-sm ring-1 ring-line backdrop-blur-xl"
-          >
-            <Image src={site.logo} alt={site.name} width={120} height={37} priority className="h-8 w-auto" />
+        {/* One capsule: logo, direct links, the main action and the full menu. */}
+        <div
+          className={`flex w-full items-center justify-between gap-2 rounded-full bg-forest/90 text-paper shadow-[0_10px_40px_-12px_rgba(15,29,12,0.55)] ring-1 ring-white/10 backdrop-blur-xl transition-all duration-500 ${
+            compact ? "max-w-[58rem] py-1.5 pl-5 pr-1.5" : "max-w-[72rem] py-2 pl-6 pr-2"
+          }`}
+        >
+          <Link href="/" aria-label={`${site.name}, página inicial`} className="shrink-0">
+            <Image src={site.logoWhite} alt={site.name} width={120} height={37} priority className={`w-auto transition-all duration-500 ${compact ? "h-7" : "h-8"}`} />
           </Link>
 
-          <div className="flex h-14 items-center gap-1 rounded-full bg-paper/85 p-1.5 shadow-sm ring-1 ring-line backdrop-blur-xl">
-            <Link href="/empreendimentos" className="hidden rounded-full px-4 py-2.5 text-sm font-medium transition hover:bg-ink/5 md:block">
-              Empreendimentos
-            </Link>
-            <Link href="/empresa" className="hidden rounded-full px-4 py-2.5 text-sm font-medium transition hover:bg-ink/5 md:block">
-              Empresa
-            </Link>
+          <nav aria-label="Atalhos" className="hidden lg:block">
+            <ul className="flex items-center gap-1">
+              {quick.map((q) => {
+                const active = pathname === q.href || pathname.startsWith(q.href + "/");
+                return (
+                  <li key={q.href}>
+                    <Link
+                      href={q.href}
+                      aria-current={active ? "page" : undefined}
+                      className="group relative block px-4 py-2 text-sm font-medium text-paper/80 transition hover:text-paper"
+                    >
+                      {q.label}
+                      <span
+                        aria-hidden
+                        className={`absolute inset-x-4 bottom-1 h-px origin-left bg-paineira transition-transform duration-500 ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-1.5">
             <a
               href={site.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden rounded-full bg-teal px-4 py-2.5 text-sm font-semibold text-forest transition hover:bg-leaf sm:block"
+              className="hidden items-center gap-2 rounded-full bg-paper px-5 py-2.5 text-sm font-semibold text-forest transition hover:bg-paineira sm:flex"
             >
-              WhatsApp
+              <span className="size-1.5 rounded-full bg-teal" aria-hidden />
+              Fale conosco
             </a>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="site-menu"
-              className="group flex items-center gap-3 rounded-full bg-forest py-2.5 pl-5 pr-4 text-sm font-semibold text-paper transition hover:bg-brand"
+              aria-label={open ? "Fechar menu" : "Abrir menu"}
+              className="grid size-11 place-items-center rounded-full ring-1 ring-white/20 transition hover:bg-white/10"
             >
-              {open ? "Fechar" : "Menu"}
-              <span className="relative block h-3 w-4" aria-hidden>
-                <span className={`absolute left-0 h-0.5 w-4 bg-current transition duration-300 ${open ? "top-1.5 rotate-45" : "top-0.5"}`} />
-                <span className={`absolute left-0 h-0.5 w-4 bg-current transition duration-300 ${open ? "top-1.5 -rotate-45" : "top-2"}`} />
+              <span className="relative block h-3 w-5" aria-hidden>
+                <span className={`absolute left-0 h-0.5 w-5 rounded bg-current transition duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
+                <span className={`absolute right-0 h-0.5 rounded bg-current transition-all duration-300 ${open ? "top-1.5 w-5 -rotate-45" : "top-2.5 w-3"}`} />
               </span>
             </button>
           </div>
