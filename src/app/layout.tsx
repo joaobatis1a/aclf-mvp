@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Figtree, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Big_Shoulders, Geist_Mono, Instrument_Serif, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
 import SmoothScroll from "@/components/motion/SmoothScroll";
+import { VideoProvider } from "@/components/video/VideoPlayer";
 import { site } from "@/config/site";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  axes: ["wdth", "opsz"],
+// Display: condensed, signage-like, drawn from urban architecture lettering.
+const display = Big_Shoulders({
+  variable: "--font-display-face",
+  subsets: ["latin", "latin-ext"],
+  axes: ["opsz"],
 });
 
-const figtree = Figtree({
-  variable: "--font-figtree",
-  subsets: ["latin"],
+// Body: an editorial grotesque with a little more character than the usual UI sans.
+const body = Schibsted_Grotesk({
+  variable: "--font-body-face",
+  subsets: ["latin", "latin-ext"],
 });
 
 const instrument = Instrument_Serif({
@@ -40,9 +43,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${bricolage.variable} ${figtree.variable} ${geistMono.variable} ${instrument.variable}`}>
+    <html lang="pt-BR" className={`${display.variable} ${body.variable} ${geistMono.variable} ${instrument.variable}`}>
       <body className="flex min-h-screen flex-col">
         <SmoothScroll>
+          <VideoProvider>
           <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-paper focus:px-5 focus:py-3">
             Pular para o conteúdo
           </a>
@@ -51,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <Footer />
+          </VideoProvider>
         </SmoothScroll>
       </body>
     </html>

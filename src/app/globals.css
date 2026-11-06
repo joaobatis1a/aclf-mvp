@@ -37,8 +37,8 @@
   --color-paineira: var(--paineira);
   --color-line: var(--line);
   --color-line-inv: var(--line-inv);
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui;
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui;
+  --font-display: var(--font-display-face), ui-sans-serif, system-ui;
+  --font-sans: var(--font-body-face), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
@@ -75,18 +75,16 @@ body {
 /* Display type: condensed, tight, big */
 .display {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 75, "opsz" 96;
-  font-weight: 700;
-  letter-spacing: -0.035em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   line-height: 0.86;
   text-transform: uppercase;
 }
 .display-soft {
   font-family: var(--font-display);
-  font-variation-settings: "wdth" 85, "opsz" 72;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.02;
 }
 
 .mono {
