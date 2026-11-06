@@ -12,11 +12,14 @@ import {
 } from "motion/react";
 import { useEffect, useRef } from "react";
 import Reel from "@/components/ui/Reel";
+import YouTubeBackground from "@/components/video/YouTubeBackground";
 import { getProperty } from "@/data/properties";
 
 const IMAGE = "/images/properties/mirante-paineiras-01.jpg";
 // Plays the launch clip when it is added to /public/videos; the aerial still stands in until then.
 const VIDEO = getProperty("mirante-das-paineiras")?.video;
+// The official launch film plays over the reel once the player is ready.
+const FILM = getProperty("mirante-das-paineiras")?.videos?.find((v) => v.kind === "filme");
 // Until then, a clip cut from the Paineiras renders: aerial, pool, facade, the view from the balcony.
 const SHOTS = [
   IMAGE,
@@ -90,6 +93,7 @@ export default function HeroWindow() {
         <motion.div className="absolute inset-0 will-change-[clip-path]" style={{ clipPath: clip }}>
           <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
             <Reel images={SHOTS} video={VIDEO} alt="Imagens do Paineiras Bairro-Parque" priority sizes="100vw" shot={3200} />
+            {FILM && <YouTubeBackground id={FILM.id} title={FILM.title} />}
           </motion.div>
           <motion.div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/40 to-forest/10" style={{ opacity: shade }} />
         </motion.div>
