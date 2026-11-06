@@ -27,9 +27,9 @@ export const getPost = (slug: string) => posts.find((p) => p.slug === slug);
 export const awards = [
   { name: "Troféu Master", edition: "30º Troféu ADEMI-PE", text: "Principal prêmio da noite, concedido pelo impacto do Mirante do Frio Residence.", image: "/images/company/award-master.jpg" },
   { name: "Troféu Residencial MCMV", edition: "Master I", text: "Habitações acessíveis com qualidade, conforto e inovação, no Mirante do Frio Residence.", image: "/images/company/award-mcmv.jpg" },
-  { name: "Troféu ESG", edition: "30º Troféu ADEMI-PE", text: "Boas práticas em sustentabilidade ambiental, responsabilidade social e governança ética.", image: "/images/company/award-esg.png" },
-  { name: "Troféu Cooperada do Ano", edition: "30º Troféu ADEMI-PE", text: "Trabalho colaborativo e iniciativas coletivas que impulsionam o desenvolvimento do setor.", image: "/images/company/award-coop.png" },
-  { name: "Troféu Incontec", edition: "30º Troféu ADEMI-PE", text: "Uso de tecnologias e processos inovadores na construção civil.", image: "/images/company/award-incontec.png" },
+  { name: "Troféu ESG", edition: "30º Troféu ADEMI-PE", text: "Boas práticas em sustentabilidade ambiental, responsabilidade social e governança ética.", image: "/images/company/award-esg.jpg" },
+  { name: "Troféu Cooperada do Ano", edition: "30º Troféu ADEMI-PE", text: "Trabalho colaborativo e iniciativas coletivas que impulsionam o desenvolvimento do setor.", image: "/images/company/award-coop.jpg" },
+  { name: "Troféu Incontec", edition: "30º Troféu ADEMI-PE", text: "Uso de tecnologias e processos inovadores na construção civil.", image: "/images/company/award-incontec.jpg" },
 ];
 
 export const numbers = [

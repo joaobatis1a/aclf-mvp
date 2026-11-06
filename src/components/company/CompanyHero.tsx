@@ -9,7 +9,7 @@ import { MaskText, Reveal } from "@/components/motion/Reveal";
 const photos = [
   { src: "/images/company/story.jpg", alt: "Equipe da empresa com troféus", className: "left-0 top-6 w-[58%] aspect-[4/5] z-10" },
   { src: "/images/properties/mirante-paineiras-01.jpg", alt: "Vista aérea do Paineiras Bairro-Parque", className: "right-0 top-0 w-[48%] aspect-[3/4]" },
-  { src: "/images/properties/shopping-cover.jpeg", alt: "Paulista North Way Shopping", className: "right-[6%] bottom-0 w-[46%] aspect-square z-20" },
+  { src: "/images/properties/paulista-north-way-shopping-photo.jpg", alt: "Paulista North Way Shopping", className: "right-[6%] bottom-0 w-[46%] aspect-square z-20" },
 ];
 
 /** Opening: the story in type on the left, a layered collage that drifts apart on scroll. */

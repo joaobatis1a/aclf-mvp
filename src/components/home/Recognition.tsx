@@ -38,11 +38,11 @@ export default function Recognition() {
           className="hidden h-[30rem] self-center lg:flex"
           images={[
             { src: "/images/company/award-master.jpg", alt: "" },
-            { src: "/images/company/award-esg.png", alt: "" },
+            { src: "/images/company/award-esg.jpg", alt: "" },
             { src: "/images/company/story.jpg", alt: "" },
             { src: "/images/company/award-mcmv.jpg", alt: "" },
-            { src: "/images/company/award-coop.png", alt: "" },
-            { src: "/images/company/award-incontec.png", alt: "" },
+            { src: "/images/company/award-coop.jpg", alt: "" },
+            { src: "/images/company/award-incontec.jpg", alt: "" },
           ]}
         />
       </div>
