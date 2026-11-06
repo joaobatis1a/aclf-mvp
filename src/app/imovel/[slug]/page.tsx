@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Gallery from "@/components/Gallery";
-import PropertyCard, { specsOf } from "@/components/PropertyCard";
+import { Reveal } from "@/components/motion/Reveal";
+import DetailHero from "@/components/property/DetailHero";
+import HoverPreviewList from "@/components/ui/HoverPreviewList";
 import { site } from "@/config/site";
-import { getProperty, phaseLabel, properties } from "@/data/properties";
+import { getProperty, phaseDot, phaseLabel, properties, specList } from "@/data/properties";
 
 // Pages are fully prerendered via generateStaticParams, so blocking validation is unnecessary.
 export const instant = false;
@@ -26,116 +27,122 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
   if (!p) notFound();
 
   const where = [p.neighborhood, p.city].filter(Boolean).join(" · ");
-  const specs = specsOf(p);
+  const specs = specList(p);
   const wa = `${site.whatsappHref}?text=${encodeURIComponent(`Olá! Quero saber mais sobre o ${p.name}.`)}`;
-  const related = properties.filter((o) => o.slug !== p.slug && o.phase === p.phase).slice(0, 3);
+  const related = properties.filter((o) => o.slug !== p.slug && o.phase === p.phase);
 
   return (
     <>
-      <section className="relative">
-        <div className="relative h-[62vh] min-h-[26rem] w-full bg-forest">
-          <Image src={p.cover} alt={`${p.name}`} fill priority sizes="100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent" />
-          <div className="container-x absolute inset-x-0 bottom-0 pb-10 text-white">
-            <nav aria-label="Trilha" className="mb-4 text-sm text-white/70">
-              <Link href="/empreendimentos" className="hover:text-white">Empreendimentos</Link> / {p.name}
-            </nav>
-            <span className="rounded-full bg-teal px-3 py-1 text-[11px] font-semibold uppercase tracking-wider">{phaseLabel[p.phase]}</span>
-            <h1 className="mt-4 font-display text-5xl font-semibold leading-none tracking-tight sm:text-7xl">{p.name}</h1>
-            {where && <p className="mt-3 text-lg text-white/85">{where}</p>}
-          </div>
-        </div>
-      </section>
+      <DetailHero name={p.name} image={p.hero ?? p.cover} fullBleed={Boolean(p.hero)} phase={phaseLabel[p.phase]} phaseDotClass={phaseDot[p.phase]} where={where} />
 
-      <div className="container-x grid gap-12 py-14 lg:grid-cols-[1.6fr_1fr]">
-        <div className="space-y-14">
-          <div>
-            <p className="font-display text-2xl leading-snug text-forest sm:text-3xl">{p.summary}</p>
-            {specs.length > 0 && (
-              <ul className="mt-8 flex flex-wrap gap-3">
-                {specs.map((s) => (
-                  <li key={s} className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold">{s}</li>
-                ))}
-              </ul>
-            )}
-          </div>
+      {specs.length > 0 && (
+        <section aria-label="Ficha técnica" className="border-b border-line bg-paper">
+          <dl className="container-x grid grid-cols-2 lg:grid-cols-4">
+            {specs.map((s) => (
+              <div key={s.k} className="border-b border-line py-7 pr-4 lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0">
+                <dt className="mono text-ink-soft">{s.k}</dt>
+                <dd className="display mt-2 text-[clamp(2.2rem,4vw,3.8rem)] text-forest">{s.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
 
-          {p.amenities && (
-            <section aria-labelledby="lazer">
-              <p className="eyebrow">Lazer</p>
-              <h2 id="lazer" className="mt-2 font-display text-3xl font-semibold">O condomínio clube</h2>
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-                {p.amenities.map((a) => (
-                  <li key={a} className="flex items-center gap-3 rounded-2xl bg-white px-5 py-4">
-                    <span className="size-2.5 rounded-full bg-teal" aria-hidden />
-                    {a}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
+      <section className="container-x grid gap-14 py-20 sm:py-28 lg:grid-cols-[1.5fr_1fr]">
+        <div>
+          <p className="mono text-teal-deep">Sobre o empreendimento</p>
+          <Reveal>
+            <p className="display-soft mt-6 text-[clamp(1.8rem,3.6vw,3.4rem)] leading-[1.1] text-forest">{p.summary}</p>
+          </Reveal>
           {p.highlights && (
-            <section aria-labelledby="diferenciais">
-              <p className="eyebrow">Diferenciais</p>
-              <h2 id="diferenciais" className="mt-2 font-display text-3xl font-semibold">Por que aqui</h2>
-              <ul className="mt-6 space-y-3 text-lg">
-                {p.highlights.map((h) => (
-                  <li key={h} className="border-b border-line pb-3">{h}</li>
-                ))}
-              </ul>
-            </section>
+            <ul className="mt-12 border-t border-line">
+              {p.highlights.map((h) => (
+                <li key={h} className="flex items-center gap-4 border-b border-line py-5 text-lg">
+                  <span className="size-2 shrink-0 rounded-full bg-paineira" aria-hidden />
+                  {h}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 
-        <aside className="lg:sticky lg:top-32 lg:self-start">
-          <div className="rounded-[2rem] bg-forest p-8 text-white">
-            <p className="eyebrow !text-leaf">Fale com a gente</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold leading-tight">Quer conhecer o {p.name}?</h2>
-            <p className="mt-3 text-white/75">A conversa já começa com o empreendimento escolhido.</p>
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-full bg-teal px-6 py-3.5 text-center font-semibold text-white transition hover:bg-teal-deep">
+        <aside className="lg:sticky lg:top-28 lg:self-start">
+          <div className="rounded-[2rem] bg-forest p-8 text-paper">
+            <p className="mono text-leaf">Fale com um consultor</p>
+            <p className="display mt-4 text-5xl">Quer conhecer?</p>
+            <p className="mt-3 text-paper/70">A conversa no WhatsApp já começa com o {p.name}.</p>
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-7 block rounded-full bg-teal px-6 py-4 text-center font-semibold transition hover:bg-teal-deep">
               Chamar no WhatsApp
             </a>
-            <a href={site.phoneHref} className="mt-3 block rounded-full border border-white/25 px-6 py-3.5 text-center font-medium transition hover:bg-white hover:text-forest">
+            <a href={site.phoneHref} className="mt-3 block rounded-full px-6 py-4 text-center font-medium ring-1 ring-line-inv transition hover:bg-paper hover:text-forest">
               Ligar {site.phone}
             </a>
           </div>
         </aside>
-      </div>
+      </section>
+
+      {p.amenities && (
+        <section aria-labelledby="lazer" className="bg-forest py-20 text-paper sm:py-28">
+          <div className="container-x">
+            <p className="mono text-leaf">Condomínio clube · {p.amenities.length} itens de lazer</p>
+            <h2 id="lazer" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)]">
+              Lazer <span className="text-paineira">sem sair de casa</span>
+            </h2>
+            <ul className="mt-12 flex flex-wrap gap-3">
+              {p.amenities.map((a) => (
+                <li key={a} className="display-soft rounded-full px-6 py-3.5 text-xl ring-1 ring-line-inv sm:text-2xl">{a}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {p.gallery && (
-        <section className="container-x pb-14" aria-labelledby="galeria">
-          <p className="eyebrow">Galeria</p>
-          <h2 id="galeria" className="mb-6 mt-2 font-display text-3xl font-semibold">Veja o projeto por dentro e por fora</h2>
-          <Gallery images={p.gallery} name={p.name} />
+        <section aria-labelledby="galeria" className="py-20 sm:py-28">
+          <div className="container-x">
+            <p className="mono text-teal-deep">Galeria · {p.gallery.length} imagens</p>
+            <h2 id="galeria" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">
+              Por dentro <span className="text-teal">e por fora</span>
+            </h2>
+          </div>
+          <div className="mt-10">
+            <Gallery images={p.gallery} name={p.name} />
+          </div>
         </section>
       )}
 
       {p.floorPlan && (
-        <section className="container-x pb-14" aria-labelledby="planta">
-          <p className="eyebrow">Planta</p>
-          <h2 id="planta" className="mb-6 mt-2 font-display text-3xl font-semibold">Apartamento tipo</h2>
-          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-line bg-white">
-            <Image src={p.floorPlan} alt={`Planta do apartamento tipo do ${p.name}`} fill sizes="(min-width: 1024px) 70rem, 100vw" className="object-contain p-4" />
+        <section aria-labelledby="planta" className="bg-paper-deep py-20 sm:py-28">
+          <div className="container-x grid gap-10 lg:grid-cols-[1fr_2fr] lg:items-center">
+            <div>
+              <p className="mono text-teal-deep">Planta</p>
+              <h2 id="planta" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">Apartamento tipo</h2>
+              {p.areaLabel && <p className="mt-5 text-lg text-ink-soft">{p.areaLabel} de área privativa.</p>}
+            </div>
+            <Reveal className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-paper">
+              <Image src={p.floorPlan} alt={`Planta do apartamento tipo do ${p.name}`} fill sizes="(min-width: 1024px) 56rem, 100vw" className="object-contain p-6" />
+            </Reveal>
           </div>
         </section>
       )}
 
       {related.length > 0 && (
-        <section className="container-x pb-8" aria-labelledby="outros">
-          <h2 id="outros" className="mb-8 font-display text-3xl font-semibold">Outros em “{phaseLabel[p.phase].toLowerCase()}”</h2>
-          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((r) => (
-              <li key={r.slug}><PropertyCard property={r} /></li>
-            ))}
-          </ul>
+        <section aria-labelledby="outros" className="container-x py-20 sm:py-28">
+          <p className="mono text-teal-deep">Também em {phaseLabel[p.phase].toLowerCase()}</p>
+          <h2 id="outros" className="display mb-10 mt-5 text-[clamp(2.4rem,5vw,4.8rem)] text-forest">Veja também</h2>
+          <HoverPreviewList
+            items={related.slice(0, 6).map((r) => ({
+              href: `/imovel/${r.slug}`,
+              title: r.name,
+              image: r.cover,
+              aside: specList(r).map((s) => s.v).join(" · ") || "Entregue",
+            }))}
+          />
         </section>
       )}
 
-      <div className="container-x pb-4">
-        <p className="text-xs leading-relaxed text-ink-soft">
-          Imagens ilustrativas, sujeitas a alterações. {p.registry}
-        </p>
+      <div className="container-x pb-16">
+        <p className="text-xs leading-relaxed text-ink-soft">Imagens ilustrativas, sujeitas a alterações. {p.registry}</p>
       </div>
     </>
   );

@@ -21,6 +21,8 @@ export type Property = {
   areaLabel?: string;
   summary: string;
   cover: string;
+  /** High-resolution image for full-bleed use; covers are only ~680px wide. */
+  hero?: string;
   gallery?: string[];
   floorPlan?: string;
   amenities?: string[];
@@ -47,6 +49,7 @@ export const properties: Property[] = [
     summary:
       "Plantas de 2 ou 3 quartos (1 suíte) em um condomínio clube completo, dentro do primeiro bairro-parque de Pernambuco.",
     cover: img("solar-paineiras-cover.png"),
+    hero: img("solar-paineiras-02.jpg"),
     gallery: seq("solar-paineiras", 11),
     floorPlan: img("solar-paineiras-planta.jpg"),
     amenities: [
@@ -94,6 +97,7 @@ export const properties: Property[] = [
     summary:
       "Mais do que um apartamento, um novo jeito de morar: qualidade de vida e valorização em um condomínio clube completo.",
     cover: img("mirante-paineiras-cover.jpg"),
+    hero: img("mirante-paineiras-03.jpg"),
     gallery: seq("mirante-paineiras", 14),
     floorPlan: img("mirante-paineiras-planta.png"),
     amenities: [
@@ -192,3 +196,20 @@ export const properties: Property[] = [
 export const getProperty = (slug: string) => properties.find((p) => p.slug === slug);
 export const byPhase = (phase: Phase) => properties.filter((p) => p.phase === phase);
 export const cities = [...new Set(properties.map((p) => p.city).filter(Boolean))] as string[];
+
+/** Dot colour per phase, shared by every listing. */
+export const phaseDot: Record<Phase, string> = {
+  lancamento: "bg-paineira",
+  "em-construcao": "bg-teal",
+  "pronto-para-morar": "bg-leaf",
+  portfolio: "bg-ink-soft",
+};
+
+export function specList(p: Property) {
+  return [
+    { k: "Área", v: p.areaLabel },
+    { k: "Quartos", v: p.slug === "solar-das-paineiras" ? "2 ou 3" : p.bedrooms?.toString() },
+    { k: "Suíte", v: p.suites?.toString() },
+    { k: "Cidade", v: p.city },
+  ].filter((s): s is { k: string; v: string } => Boolean(s.v));
+}
