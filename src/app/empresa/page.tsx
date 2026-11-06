@@ -68,7 +68,7 @@ export default function EmpresaPage() {
         <div>
           <p className="mono text-teal-deep">O grupo</p>
           <h2 id="grupo" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">
-            Mais do que <span className="text-teal">incorporação</span>
+            Mais do que <span className="text-teal-deep">incorporação</span>
           </h2>
           <dl className="mt-10 grid gap-px overflow-hidden rounded-3xl bg-line sm:grid-cols-2">
             {group.map((g) => (

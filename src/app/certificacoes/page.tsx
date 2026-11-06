@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Reveal } from "@/components/motion/Reveal";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = { title: "Certificações e selos Caixa" };
@@ -13,29 +14,47 @@ const benefits = [
   { title: "Inovação e comunidade", text: "BIM na gestão do empreendimento e inclusão de trabalhadores e fornecedores locais, com ações de integração comunitária." },
 ];
 
+const grades = [
+  { level: "Safira", projects: "Mirante do Frio Residence e Mirante dos Corais" },
+  { level: "Topázio", projects: "Vila do Frio Condomínio Clube" },
+];
+
 export default function CertificacoesPage() {
   return (
     <>
-      <PageHeader eyebrow="Empresa" title="O que os selos da Caixa significam para quem compra.">
-        Um empreendimento certificado passa por avaliações do projeto à entrega. Veja o que isso muda na prática.
+      <PageHeader eyebrow="Empresa · Certificações" title="O que os selos" accent="garantem a você">
+        Um empreendimento certificado passa por avaliações do projeto à entrega. Veja o que isso muda para quem compra.
       </PageHeader>
-      <div className="container-x py-16">
-        <div className="relative mb-12 aspect-[21/6] overflow-hidden rounded-3xl bg-forest">
-          <Image src="/images/company/seals-caixa.png" alt="Selos e certificações Caixa" fill sizes="(min-width: 1024px) 70rem, 100vw" className="object-contain p-4" />
+
+      <section aria-label="Selos" className="bg-forest py-10">
+        <div className="container-x relative aspect-[21/5] min-h-28">
+          <Image src="/images/company/seals-caixa.png" alt="Selos e certificações Caixa" fill sizes="86rem" className="object-contain" />
         </div>
-        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {benefits.map((b) => (
-            <li key={b.title} className="rounded-3xl border border-line bg-white p-7">
-              <span className="block size-3 rounded-full bg-teal" aria-hidden />
-              <h2 className="mt-5 font-display text-2xl font-semibold text-forest">{b.title}</h2>
-              <p className="mt-3 leading-relaxed text-ink-soft">{b.text}</p>
-            </li>
+      </section>
+
+      <section className="container-x py-24">
+        <ul className="grid border-t border-line md:grid-cols-2">
+          {benefits.map((b, i) => (
+            <Reveal as="li" key={b.title} delay={(i % 2) * 0.08} className="border-b border-line py-10 md:odd:border-r md:odd:pr-10 md:even:pl-10">
+              <h2 className="display text-[clamp(2rem,3.4vw,3.2rem)] text-forest">{b.title}</h2>
+              <p className="mt-4 max-w-lg text-lg leading-relaxed text-ink-soft">{b.text}</p>
+            </Reveal>
           ))}
         </ul>
-        <p className="mt-10 rounded-3xl bg-paper-deep p-7 text-lg leading-relaxed">
-          <strong>Graus do selo Casa Azul:</strong> Mirante do Frio Residence e Mirante dos Corais têm o nível Safira. O Vila do Frio Condomínio Clube tem o nível Topázio.
-        </p>
-      </div>
+      </section>
+
+      <section aria-labelledby="graus" className="container-x pb-24">
+        <p className="mono text-teal-deep">Selo Casa Azul</p>
+        <h2 id="graus" className="display mt-4 text-[clamp(2.6rem,5.5vw,5.5rem)] text-forest">Graus conquistados</h2>
+        <dl className="mt-10 grid gap-4 md:grid-cols-2">
+          {grades.map((g) => (
+            <div key={g.level} className="rounded-[2rem] bg-paper-deep p-8">
+              <dt className="display text-6xl text-teal-deep">{g.level}</dt>
+              <dd className="mt-3 text-lg text-ink-soft">{g.projects}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
     </>
   );
 }
