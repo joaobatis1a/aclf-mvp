@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import DetailHero from "@/components/property/DetailHero";
 import HoverPreviewList from "@/components/ui/HoverPreviewList";
 import { site } from "@/config/site";
-import { getProperty, phaseDot, phaseLabel, properties, specList } from "@/data/properties";
+import { getProperty, phaseDot, phaseLabel, properties, shotsOf, specList } from "@/data/properties";
 
 // Pages are fully prerendered via generateStaticParams, so blocking validation is unnecessary.
 export const instant = false;
@@ -33,7 +33,7 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
 
   return (
     <>
-      <DetailHero name={p.name} image={p.hero ?? p.cover} fullBleed={Boolean(p.hero)} phase={phaseLabel[p.phase]} phaseDotClass={phaseDot[p.phase]} where={where} />
+      <DetailHero name={p.name} images={shotsOf(p)} video={p.video} fullBleed={Boolean(p.hero)} phase={phaseLabel[p.phase]} phaseDotClass={phaseDot[p.phase]} where={where} />
 
       {specs.length > 0 && (
         <section aria-label="Ficha técnica" className="border-b border-line bg-paper">

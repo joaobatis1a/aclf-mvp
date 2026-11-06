@@ -1,14 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { MaskText, Reveal } from "@/components/motion/Reveal";
+import Reel from "@/components/ui/Reel";
 
 type Props = {
   name: string;
-  image: string;
+  /** Shots for the reel, hero first. */
+  images: string[];
+  video?: string;
   phase: string;
   phaseDotClass: string;
   where?: string;
@@ -44,11 +46,13 @@ function FullBleed(props: Props) {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "60%"]);
 
   return (
-    <section ref={ref} className="relative h-[92svh] min-h-[34rem] overflow-hidden bg-forest text-paper">
-      <motion.div className="absolute inset-0" style={{ y, scale }}>
-        <Image src={props.image} alt={`Imagem do ${props.name}`} fill priority sizes="100vw" className="object-cover" />
+    <section ref={ref} data-nav="dark" className="relative h-[92svh] min-h-[34rem] overflow-hidden bg-forest text-paper">
+      <motion.div className="absolute inset-0 [--reel-top:6.5rem]" style={{ y, scale }}>
+        <Reel images={props.images} video={props.video} alt={`Imagens do ${props.name}`} priority sizes="100vw" progress />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/35 to-forest/10" />
+      {/* Keeps the light navigation legible over bright skies. */}
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-forest/70 to-transparent" />
       <motion.div style={{ y: textY }} className="container-x relative flex h-full flex-col justify-end pb-12">
         <Meta {...props} light />
         <h1 className="display mt-4 max-w-6xl text-[clamp(3.2rem,11vw,11rem)]">
@@ -70,7 +74,7 @@ function Arched(props: Props) {
           </h1>
         </div>
         <Reveal className="arch relative aspect-[3/4] w-full max-w-md justify-self-end">
-          <Image src={props.image} alt={`Imagem do ${props.name}`} fill priority sizes="(min-width: 1024px) 28rem, 90vw" className="object-cover" />
+          <Reel images={props.images} video={props.video} alt={`Imagens do ${props.name}`} priority sizes="(min-width: 1024px) 28rem, 90vw" />
         </Reveal>
       </div>
     </section>

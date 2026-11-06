@@ -239,3 +239,8 @@ export function specList(p: Property) {
     { k: "Cidade", v: p.city },
   ].filter((s): s is { k: string; v: string } => Boolean(s.v));
 }
+
+/** Shot list for a project's reel: the hero first, then the gallery, without repeats. */
+export function shotsOf(p: Pick<Property, "hero" | "cover" | "gallery">, max = 6) {
+  return [...new Set([p.hero ?? p.cover, ...(p.gallery ?? [])])].slice(0, max);
+}

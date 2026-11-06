@@ -11,12 +11,20 @@ import {
   useTransform,
 } from "motion/react";
 import { useEffect, useRef } from "react";
-import Media from "@/components/ui/Media";
+import Reel from "@/components/ui/Reel";
 import { getProperty } from "@/data/properties";
 
 const IMAGE = "/images/properties/mirante-paineiras-01.jpg";
 // Plays the launch clip when it is added to /public/videos; the aerial still stands in until then.
 const VIDEO = getProperty("mirante-das-paineiras")?.video;
+// Until then, a clip cut from the Paineiras renders: aerial, pool, facade, the view from the balcony.
+const SHOTS = [
+  IMAGE,
+  "/images/properties/mirante-paineiras-piscina.jpg",
+  "/images/properties/mirante-paineiras-03.jpg",
+  "/images/properties/solar-paineiras-01.jpg",
+  "/images/properties/solar-paineiras-07.jpg",
+];
 const rise = { hidden: { y: "105%" }, show: { y: "0%" } };
 
 /**
@@ -81,7 +89,7 @@ export default function HeroWindow() {
         {/* The window sits above the headline, so opening it covers the words. */}
         <motion.div className="absolute inset-0 will-change-[clip-path]" style={{ clipPath: clip }}>
           <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
-            <Media image={IMAGE} video={VIDEO} alt="Vista aérea do lazer do Mirante das Paineiras" priority sizes="100vw" />
+            <Reel images={SHOTS} video={VIDEO} alt="Imagens do Paineiras Bairro-Parque" priority sizes="100vw" shot={3200} />
           </motion.div>
           <motion.div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/40 to-forest/10" style={{ opacity: shade }} />
         </motion.div>

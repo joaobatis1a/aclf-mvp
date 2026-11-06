@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import Media from "@/components/ui/Media";
-import { phaseDot, phaseLabel, properties, specList, type Phase } from "@/data/properties";
+import Reel from "@/components/ui/Reel";
+import { phaseDot, phaseLabel, properties, shotsOf, specList, type Phase } from "@/data/properties";
 
 const PHASES: Phase[] = ["lancamento", "em-construcao", "pronto-para-morar"];
 const INTERVAL = 6500;
@@ -83,7 +83,7 @@ export default function Showroom() {
                 exit={{ opacity: 0, transition: { delay: 0.6, duration: 0.2 } }}
                 transition={{ duration: 0.9, ease: [0.7, 0, 0.2, 1] }}
               >
-                <Media image={current.hero ?? current.cover} video={current.video} alt={`Imagem do ${current.name}`} sizes="(min-width: 1024px) 60vw, 100vw" />
+                <Reel images={shotsOf(current, 4)} video={current.video} alt={`Imagens do ${current.name}`} sizes="(min-width: 1024px) 60vw, 100vw" shot={2300} playing={visible} />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/10 to-transparent" />
               </motion.div>
             </AnimatePresence>
