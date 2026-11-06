@@ -60,12 +60,12 @@ export default function HeroWindow() {
           </motion.span>
           <motion.span style={{ x: lineDownX, opacity: linesOpacity }} className="block self-end overflow-hidden text-right text-[clamp(3rem,10.5vw,11rem)]">
             <motion.span className="block" variants={rise} initial="hidden" animate="show" transition={{ duration: 1.1, delay: 0.12, ease: [0.2, 0.8, 0.2, 1] }}>
-              <span className="text-teal">inteiro</span> em volta
+              <span className="text-teal-deep">inteiro</span> em volta
             </motion.span>
           </motion.span>
         </h1>
 
-        <motion.div style={{ opacity: hintOpacity }} className="mono absolute left-4 top-[calc(13svh+clamp(3rem,10.5vw,11rem))] mt-3 max-w-[14rem] text-ink-soft sm:left-8">
+        <motion.div style={{ opacity: hintOpacity }} className="mono absolute left-4 top-[calc(13svh+clamp(3rem,10.5vw,11rem))] mt-3 hidden max-w-[14rem] text-ink-soft sm:left-8 sm:block">
           Paulista · Recife · Caruaru
           <br />
           construindo desde 1999
@@ -134,7 +134,7 @@ function StaticHero() {
   return (
     <section aria-labelledby="hero-title" className="container-x pb-16 pt-28">
       <h1 id="hero-title" className="display text-[clamp(3rem,10vw,10rem)] text-forest">
-        Um bairro-parque <span className="text-teal">inteiro</span> em volta
+        Um bairro-parque <span className="text-teal-deep">inteiro</span> em volta
       </h1>
       <div className="arch relative mt-10 aspect-[4/5] sm:aspect-[16/9]">
         <Image src={IMAGE} alt="Vista aérea do lazer do Mirante das Paineiras" fill priority sizes="100vw" className="object-cover" />

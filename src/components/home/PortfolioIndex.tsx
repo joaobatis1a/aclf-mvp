@@ -11,7 +11,7 @@ export default function PortfolioIndex() {
           <div>
             <p className="mono text-teal-deep">Portfólio · {list.length} obras entregues</p>
             <h2 id="entregues" className="display mt-5 text-[clamp(2.8rem,7vw,7rem)] text-forest">
-              Chaves <span className="outline-text text-forest">entregues</span>
+              Chaves <span className="text-teal-deep">entregues</span>
             </h2>
           </div>
           <p className="max-w-sm text-ink-soft">Passe o cursor sobre um nome para ver a obra. Cada um abre a página do empreendimento.</p>

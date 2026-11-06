@@ -25,7 +25,7 @@ export default function AmenitiesScroll() {
       <div className="container-x">
         <p className="mono text-teal-deep">Condomínio clube · Mirante das Paineiras</p>
         <h2 id="lazer" className="display mt-5 max-w-5xl text-[clamp(2.8rem,7.5vw,7.5rem)] text-forest">
-          O fim de semana <span className="text-teal">começa no térreo</span>
+          O fim de semana <span className="text-teal-deep">começa no térreo</span>
         </h2>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:gap-16">

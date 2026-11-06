@@ -47,7 +47,7 @@ export default function PropertyExplorer({ initialPhase }: { initialPhase?: Phas
 
   return (
     <div>
-      <div className="sticky top-20 z-20 -mx-2 rounded-[1.75rem] bg-paper-deep/90 p-2 backdrop-blur-xl sm:top-24">
+      <div className="z-20 -mx-2 rounded-[1.75rem] bg-paper-deep/90 p-2 backdrop-blur-xl md:sticky md:top-24">
         <div className="flex flex-wrap items-center gap-2">
           <div role="group" aria-label="Fase" className="flex flex-wrap gap-1.5">
             <button type="button" className={pill(phase === "")} onClick={() => setPhase("")} aria-pressed={phase === ""}>
@@ -106,6 +106,7 @@ export default function PropertyExplorer({ initialPhase }: { initialPhase?: Phas
               <motion.li
                 key={p.slug}
                 layout
+                className="min-w-0"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96 }}

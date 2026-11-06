@@ -71,7 +71,7 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
             <p className="mono text-leaf">Fale com um consultor</p>
             <p className="display mt-4 text-5xl">Quer conhecer?</p>
             <p className="mt-3 text-paper/70">A conversa no WhatsApp já começa com o {p.name}.</p>
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-7 block rounded-full bg-teal px-6 py-4 text-center font-semibold transition hover:bg-teal-deep">
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-7 block rounded-full bg-teal px-6 py-4 text-center font-semibold transition hover:bg-leaf text-forest">
               Chamar no WhatsApp
             </a>
             <a href={site.phoneHref} className="mt-3 block rounded-full px-6 py-4 text-center font-medium ring-1 ring-line-inv transition hover:bg-paper hover:text-forest">
@@ -102,7 +102,7 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
           <div className="container-x">
             <p className="mono text-teal-deep">Galeria · {p.gallery.length} imagens</p>
             <h2 id="galeria" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">
-              Por dentro <span className="text-teal">e por fora</span>
+              Por dentro <span className="text-teal-deep">e por fora</span>
             </h2>
           </div>
           <div className="mt-10">

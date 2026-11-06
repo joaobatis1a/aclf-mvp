@@ -16,7 +16,7 @@ export default function Footer() {
           <MaskText text="conversa." delay={0.2} />
         </h2>
         <Reveal className="mt-12 flex flex-wrap gap-3">
-          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className="rounded-full bg-teal px-8 py-4 font-semibold text-white transition hover:bg-teal-deep">
+          <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className="rounded-full bg-teal px-8 py-4 font-semibold text-forest transition hover:bg-leaf">
             Chamar no WhatsApp
           </a>
           <a href={site.phoneHref} className="rounded-full border border-line-inv px-8 py-4 font-semibold transition hover:bg-paper hover:text-forest">
@@ -58,7 +58,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <p aria-hidden className="display outline-text pointer-events-none mt-16 select-none whitespace-nowrap text-center text-[30vw] leading-[0.75] [--outline:rgba(238,242,233,0.22)]">
+      <p aria-hidden className="display pointer-events-none mt-16 select-none whitespace-nowrap text-center text-[30vw] leading-[0.75] text-paper/[0.06]">
         {site.shortName}
       </p>
 

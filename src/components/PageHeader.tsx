@@ -25,7 +25,7 @@ export default function PageHeader({
             {accent && (
               <>
                 <br />
-                <MaskText text={accent} className="text-teal" delay={0.12} />
+                <MaskText text={accent} className="text-teal-deep" delay={0.12} />
               </>
             )}
           </h1>

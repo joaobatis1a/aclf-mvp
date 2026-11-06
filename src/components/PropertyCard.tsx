@@ -27,10 +27,10 @@ export default function PropertyCard({ property: p, priority = false }: { proper
           </dl>
         )}
       </div>
-      <p className="mono mt-5 flex items-center gap-2 text-ink-soft">
+      <p className="mono mt-5 flex min-w-0 items-center gap-2 text-ink-soft">
         <span className={`size-2 rounded-full ${phaseDot[p.phase]}`} aria-hidden />
         {phaseLabel[p.phase]}
-        {where && <span className="truncate">· {where}</span>}
+        {where && <span className="min-w-0 truncate">· {where}</span>}
       </p>
       <h3 className="display mt-2 text-[clamp(2rem,3vw,2.8rem)] text-forest transition group-hover:text-brand">{p.name}</h3>
     </Link>

@@ -24,7 +24,7 @@ export default function Recognition() {
         <div className="lg:sticky lg:top-28 lg:self-start">
           <p className="mono text-teal-deep">Reconhecimento</p>
           <h2 id="reconhecimento" className="display mt-5 text-[clamp(2.8rem,6.5vw,6.5rem)] text-forest">
-            5 troféus <span className="text-teal">numa noite</span>
+            5 troféus <span className="text-teal-deep">numa noite</span>
           </h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
             No 30º Troféu ADEMI-PE, a maior premiação do mercado imobiliário pernambucano, o Mirante do Frio Residence levou o Troféu Master.

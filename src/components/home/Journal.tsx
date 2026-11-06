@@ -9,7 +9,7 @@ export default function Journal() {
         <div>
           <p className="mono text-teal-deep">Blog</p>
           <h2 id="blog" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">
-            Para decidir <span className="text-teal">com calma</span>
+            Para decidir <span className="text-teal-deep">com calma</span>
           </h2>
           <Link href="/blog" className="mt-8 inline-flex rounded-full border border-forest px-7 py-3.5 font-semibold text-forest transition hover:bg-forest hover:text-paper">
             Todos os artigos

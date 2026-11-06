@@ -74,7 +74,7 @@ export default function Nav() {
               href={site.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden rounded-full bg-teal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-deep sm:block"
+              className="hidden rounded-full bg-teal px-4 py-2.5 text-sm font-semibold text-forest transition hover:bg-leaf sm:block"
             >
               WhatsApp
             </a>

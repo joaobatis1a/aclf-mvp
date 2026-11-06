@@ -48,7 +48,7 @@ function Word({ token, progress, range }: { token: string; progress: MotionValue
   const highlight = token.startsWith("*");
   const text = token.replaceAll("*", "");
   return (
-    <motion.span style={{ opacity }} className={highlight ? "text-teal" : undefined}>
+    <motion.span style={{ opacity }} className={highlight ? "text-teal-deep" : undefined}>
       {text}{" "}
     </motion.span>
   );

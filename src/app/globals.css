@@ -124,11 +124,6 @@ body {
   }
 }
 
-.outline-text {
-  color: transparent !important;
-  -webkit-text-stroke: 1.5px var(--outline, var(--forest));
-}
-
 /* Marquee */
 @keyframes marquee {
   to {
