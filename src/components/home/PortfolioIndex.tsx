@@ -51,7 +51,7 @@ function Belt({ items, reverse }: { items: Property[]; reverse: boolean }) {
                 tabIndex={c > 0 ? -1 : undefined}
                 className="group/card relative block aspect-[4/5] overflow-hidden rounded-[2rem] transition duration-500 group-hover/belt:opacity-60 hover:!opacity-100"
               >
-                <Image src={p.cover} alt={c > 0 ? "" : p.name} fill sizes="22rem" className="object-cover transition duration-[1.2s] ease-out group-hover/card:scale-110" />
+                <Image src={p.cover} alt={c > 0 ? "" : p.name} fill sizes="22rem" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/10 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-paper">
                   <p className="mono text-paper/70">{p.city ?? "Entregue"}</p>

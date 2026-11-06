@@ -57,7 +57,7 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
               className={`group relative block h-[56svh] w-full overflow-hidden bg-paper-deep ${i % 3 === 1 ? "arch" : "rounded-[1.5rem]"}`}
               aria-label={`Ampliar foto ${i + 1} de ${images.length} do ${name}`}
             >
-              <Image src={src} alt={`${name}: foto ${i + 1}`} fill sizes="(min-width: 640px) 46vw, 78vw" className="object-cover transition duration-[1.2s] ease-out group-hover:scale-105" />
+              <Image src={src} alt={`${name}: foto ${i + 1}`} fill sizes="(min-width: 640px) 46vw, 78vw" className="object-cover" />
               <span className="mono absolute bottom-4 left-4 rounded-full bg-paper/90 px-3 py-1.5 text-forest opacity-0 transition group-hover:opacity-100">Ampliar</span>
             </button>
           </li>
