@@ -109,8 +109,8 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
               </ul>
             </div>
             {shots.length > 1 && (
-              <div className="lg:sticky lg:top-28 lg:h-[calc(100vh-9rem)] lg:self-start">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full">
+              <div className="sticky top-20 z-10 order-first h-[40svh] lg:order-none lg:top-28 lg:h-[calc(100vh-9rem)] lg:self-start">
+                <div className="relative h-full overflow-hidden rounded-[2rem]">
                   <Reel images={[...(p.gallery ?? shots)].slice(0, 8)} alt={`Áreas do ${p.name}`} sizes="(min-width: 1024px) 45vw, 100vw" shot={2600} progress />
                 </div>
               </div>
