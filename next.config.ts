@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // A single, higher quality for every optimized image: renders and aerial photos lose detail at 75.
-    qualities: [85],
+    // 85 is the project default (see components/ui/Img); 75 stays allowed so pages
+    // loaded with an older bundle, or any image that keeps the framework default, never break.
+    qualities: [75, 85],
     // Thumbnails of the company's official YouTube videos.
     remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }],
   },
