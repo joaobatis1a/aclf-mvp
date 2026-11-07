@@ -28,9 +28,10 @@ export default function AmenitiesScroll() {
           O fim de semana <span className="accent text-teal-deep">começa no térreo</span>
         </h2>
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full">
+        <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:gap-16">
+          {/* Pinned on every screen size: on phones it sits on top while the list scrolls underneath. */}
+          <div className="sticky top-20 z-10 h-[44svh] lg:top-24 lg:h-[calc(100vh-8rem)]">
+            <div className="relative h-full overflow-hidden rounded-[2rem] shadow-[0_20px_40px_-25px_rgba(15,29,12,0.5)] lg:shadow-none">
               <AnimatePresence initial={false}>
                 <motion.div
                   key={items[active].img}
@@ -50,7 +51,7 @@ export default function AmenitiesScroll() {
           </div>
 
           <div>
-            <ol className="lg:py-[30vh]">
+            <ol className="pb-[24svh] pt-2 lg:py-[30vh]">
               {items.map((it, i) => (
                 <Item key={it.name} index={i} name={it.name} active={active === i} onActive={setActive} />
               ))}
@@ -72,7 +73,7 @@ export default function AmenitiesScroll() {
 
 function Item({ name, index, active, onActive }: { name: string; index: number; active: boolean; onActive: (i: number) => void }) {
   const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  const inView = useInView(ref, { margin: "-62% 0px -34% 0px" });
   useEffect(() => {
     if (inView) onActive(index);
   }, [inView, index, onActive]);
