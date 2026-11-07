@@ -81,6 +81,8 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
   useEffect(() => {
     if (off || !host.current) return;
     let player: YTPlayer | null = null;
+    // The player's methods only exist after onReady; calls before that would throw.
+    let ready: YTPlayer | null = null;
     let timer: ReturnType<typeof setInterval> | undefined;
     let cancelled = false;
     let playedSince = 0;
@@ -94,8 +96,8 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
       if (!onScreen) {
         playedSince = 0;
         setVisible(false);
-        player?.pauseVideo();
-      } else player?.playVideo();
+        ready?.pauseVideo();
+      } else ready?.playVideo();
     });
     io.observe(hostEl);
     const onVisibility = () => {
@@ -126,6 +128,7 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
         },
         events: {
           onReady: (e) => {
+            ready = e.target;
             e.target.mute();
             e.target.playVideo();
             timer = setInterval(() => {
