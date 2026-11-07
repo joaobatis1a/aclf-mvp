@@ -88,23 +88,34 @@ export default function Gallery({ images, name }: { images: string[]; name: stri
             <button type="button" onClick={close} autoFocus className="absolute right-4 top-4 rounded-full bg-paper px-5 py-2.5 text-sm font-semibold text-forest">
               Fechar
             </button>
-            <button type="button" onClick={() => step(-1)} aria-label="Foto anterior" className="absolute left-3 top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-paper/10 text-2xl text-paper hover:bg-paper/20">←</button>
-            <button type="button" onClick={() => step(1)} aria-label="Próxima foto" className="absolute right-3 top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-paper/10 text-2xl text-paper hover:bg-paper/20">→</button>
+            <button type="button" onClick={() => step(-1)} aria-label="Foto anterior" className="absolute left-3 top-1/2 z-10 hidden lg:grid size-12 -translate-y-1/2 place-items-center rounded-full bg-paper/10 text-2xl text-paper hover:bg-paper/20">←</button>
+            <button type="button" onClick={() => step(1)} aria-label="Próxima foto" className="absolute right-3 top-1/2 z-10 hidden lg:grid size-12 -translate-y-1/2 place-items-center rounded-full bg-paper/10 text-2xl text-paper hover:bg-paper/20">→</button>
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                className="relative h-[80svh] w-full max-w-6xl"
+                className="relative h-[80svh] w-full max-w-6xl touch-pan-y"
+                // Phones: swipe sideways to move between photos.
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.35}
+                onDragEnd={(_, info) => {
+                  if (Math.abs(info.offset.x) > 60 || Math.abs(info.velocity.x) > 400) step(info.offset.x < 0 ? 1 : -1);
+                }}
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Image src={images[active]} alt={`${name}: foto ${active + 1}`} fill sizes="100vw" className="object-contain" />
+                <Image src={images[active]} alt={`${name}: foto ${active + 1}`} fill sizes="100vw" draggable={false} className="pointer-events-none object-contain" />
               </motion.div>
             </AnimatePresence>
-            <p className="mono absolute bottom-5 text-paper/70">
-              {active + 1} / {images.length} · imagem ilustrativa
-            </p>
+            <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+              <button type="button" onClick={() => step(-1)} aria-label="Foto anterior" className="grid size-11 place-items-center rounded-full bg-paper/10 text-xl text-paper lg:hidden">←</button>
+              <p className="mono text-paper/70">
+                {active + 1} / {images.length} · imagem ilustrativa
+              </p>
+              <button type="button" onClick={() => step(1)} aria-label="Próxima foto" className="grid size-11 place-items-center rounded-full bg-paper/10 text-xl text-paper lg:hidden">→</button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
