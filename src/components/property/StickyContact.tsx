@@ -27,7 +27,7 @@ export default function StickyContact({ name, phase, dotClass }: { name: string;
       {past && !footer && (
         <motion.aside
           aria-label={`Contato sobre o ${name}`}
-          className="fixed inset-x-3 bottom-3 z-40 flex justify-center sm:bottom-5"
+          className="fixed inset-x-3 bottom-[6rem] z-40 flex justify-center lg:bottom-5"
           initial={{ y: 120, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 120, opacity: 0 }}

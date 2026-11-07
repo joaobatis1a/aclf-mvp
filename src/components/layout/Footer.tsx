@@ -17,7 +17,7 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="px-3 pb-3 pt-16 sm:px-5 sm:pb-5">
+    <footer className="px-3 pb-28 pt-16 sm:px-5 lg:pb-5">
       <div className="relative overflow-hidden rounded-[2.5rem] bg-forest text-paper">
         <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 size-[30rem] rounded-full bg-paineira/15 blur-3xl" />
 

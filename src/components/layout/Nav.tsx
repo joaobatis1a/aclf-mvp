@@ -3,13 +3,11 @@
 import Image from "@/components/ui/Img";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { useLenis } from "lenis/react";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useState } from "react";
 import { site, type NavItem } from "@/config/site";
 import { getProperty } from "@/data/properties";
-
-const ease = [0.7, 0, 0.2, 1] as const;
+import MobileDock from "./MobileDock";
 
 const items: NavItem[] = [
   {
@@ -54,12 +52,8 @@ function opensOnDark(pathname: string) {
 
 export default function Nav() {
   const pathname = usePathname();
-  const lenis = useLenis();
   const { scrollY } = useScroll();
   const [compact, setCompact] = useState(false);
-  // The mobile menu remembers the page it was opened on, so navigating closes it.
-  const [openOn, setOpenOn] = useState<string | null>(null);
-  const open = openOn === pathname;
   // Desktop dropdown, also tied to the page it was opened on so a navigation always closes it.
   const [drop, setDrop] = useState<{ label: string; path: string } | null>(null);
   const dropOpen = (label: string) => drop?.label === label && drop.path === pathname;
@@ -67,20 +61,13 @@ export default function Nav() {
   useMotionValueEvent(scrollY, "change", (y) => setCompact(y > 40));
 
   useEffect(() => {
-    if (open) lenis?.stop();
-    else lenis?.start();
-    document.documentElement.style.overflow = open ? "hidden" : "";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      setOpenOn(null);
-      setDrop(null);
-    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setDrop(null);
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, lenis]);
+  }, []);
 
   // At the top the bar dissolves into the page; once scrolling, it tightens into a capsule.
-  const light = compact || open || opensOnDark(pathname);
+  const light = compact || opensOnDark(pathname);
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   return (
@@ -173,64 +160,11 @@ export default function Nav() {
               <span className="size-1.5 rounded-full bg-teal" aria-hidden />
               Fale conosco
             </a>
-            <button
-              type="button"
-              onClick={() => setOpenOn(open ? null : pathname)}
-              aria-expanded={open}
-              aria-controls="site-menu"
-              className={`rounded-full px-5 py-2.5 text-sm font-semibold ring-1 transition lg:hidden ${light ? "ring-white/30" : "ring-line"}`}
-            >
-              {open ? "Fechar" : "Menu"}
-            </button>
           </div>
         </div>
       </header>
 
-      {/* Small screens only: the links do not fit in the bar. */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="site-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menu do site"
-            className="fixed inset-0 z-40 overflow-y-auto bg-forest text-paper lg:hidden"
-            initial={{ clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.6, ease }}
-            data-lenis-prevent
-          >
-            <nav aria-label="Menu" className="container-x pb-12 pt-28">
-              <ul>
-                {items.map((item, i) => (
-                  <motion.li
-                    key={item.label}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.05, duration: 0.5 }}
-                    className="border-b border-line-inv py-4"
-                  >
-                    <Link href={item.href} className="display text-5xl">{item.label}</Link>
-                    {item.children && (
-                      <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                        {item.children.map((c) => (
-                          <li key={c.href + c.label}>
-                            <Link href={c.href} className="text-sm text-paper/65 hover:text-paper">{c.label}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </motion.li>
-                ))}
-              </ul>
-              <a href={site.whatsappHref} className="mt-8 block rounded-full bg-paper px-6 py-4 text-center font-semibold text-forest">
-                Fale conosco · {site.whatsappLabel}
-              </a>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileDock />
     </>
   );
 }
