@@ -37,6 +37,14 @@ export default function Showroom() {
     return () => clearTimeout(t);
   }, [running, index, list.length]);
 
+  const strip = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    const el = strip.current?.querySelector<HTMLElement>("[data-on]");
+    const box = strip.current;
+    if (!el || !box) return;
+    box.scrollTo({ left: el.offsetLeft - box.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
+  }, [index, phase]);
+
   const pick = (i: number) => {
     setIndex(i);
     setAuto(false);
@@ -76,7 +84,7 @@ export default function Showroom() {
         >
           {/* Stage */}
           <motion.div
-            className="relative order-1 aspect-[4/5] touch-pan-y overflow-hidden rounded-[2rem] bg-forest-2 sm:aspect-[16/11] lg:order-2 lg:aspect-auto lg:min-h-[72vh]"
+            className="relative order-1 h-[58svh] touch-pan-y overflow-hidden rounded-[2rem] bg-forest-2 sm:h-auto sm:aspect-[16/11] lg:order-2 lg:aspect-auto lg:min-h-[72vh]"
             // Swipe sideways on the stage to move between projects, like a story.
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -142,12 +150,44 @@ export default function Showroom() {
             </div>
           </motion.div>
 
-          <p className="mono order-1 -mt-4 text-center text-paper/50 lg:hidden" aria-hidden>
-            ← deslize para trocar →
-          </p>
+          {/* Phones: the names sit right under the stage, so picking one never scrolls it away. */}
+          <div className="order-2 -mt-3 lg:hidden">
+            <ul ref={strip} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" data-lenis-prevent-horizontal>
+              {list.map((p, i) => {
+                const on = p.slug === current.slug;
+                return (
+                  <li key={p.slug} className="shrink-0 snap-start">
+                    <button
+                      type="button"
+                      data-on={on || undefined}
+                      onClick={() => pick(i)}
+                      aria-pressed={on}
+                      className={`relative flex items-center gap-2 overflow-hidden rounded-full px-4 py-2.5 text-sm font-medium transition ${on ? "bg-paper text-forest" : "text-paper/70 ring-1 ring-line-inv"}`}
+                    >
+                      <span className={`size-1.5 rounded-full ${phaseDot[p.phase]}`} aria-hidden />
+                      {p.name}
+                      {on && running && (
+                        <motion.span
+                          key={`${p.slug}-${index}-m`}
+                          aria-hidden
+                          className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-paineira"
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: INTERVAL / 1000, ease: "linear" }}
+                        />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mono mt-3 text-center text-paper/45" aria-hidden>
+              toque num nome ou deslize a foto
+            </p>
+          </div>
 
           {/* List */}
-          <ol className="order-2 flex flex-col justify-center lg:order-1">
+          <ol className="order-3 hidden flex-col justify-center lg:order-1 lg:flex">
             {list.map((p, i) => {
               const on = p.slug === current.slug;
               return (
