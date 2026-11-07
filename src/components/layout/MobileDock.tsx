@@ -28,7 +28,7 @@ export default function MobileDock() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
 
   return (
-    <nav aria-label="Navegação rápida" className="fixed inset-x-3 bottom-3 z-50 lg:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+    <nav data-dock aria-label="Navegação rápida" className="fixed inset-x-3 bottom-3 z-50 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] lg:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
       <ul className="mx-auto flex max-w-md items-stretch justify-between gap-1 rounded-[1.75rem] bg-forest/95 p-1.5 text-paper shadow-[0_18px_40px_-14px_rgba(15,29,12,0.6)] ring-1 ring-white/10 backdrop-blur-xl">
         {items.map((it) => {
           const on = isActive(it.href);

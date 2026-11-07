@@ -137,6 +137,13 @@ body {
   overflow: hidden;
 }
 
+/* Property pages on phones: the contact bar takes the dock's place instead of stacking on it. */
+@media (max-width: 1023px) {
+  html[data-contact] [data-dock] {
+    transform: translateY(calc(100% + 2rem));
+  }
+}
+
 .container-x {
   width: min(100% - 2rem, 86rem);
   margin-inline: auto;
