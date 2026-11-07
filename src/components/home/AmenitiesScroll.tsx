@@ -35,7 +35,7 @@ function Photo({ active, sizes }: { active: number; sizes: string }) {
 
 /**
  * Desktop: the photo stays pinned beside the list and changes as each item reaches the middle.
- * Phones: a self-contained stage with a strip of names (see PhoneStory).
+ * Phones: the same idea stacked, photo pinned on top and names below (see PhonePinned).
  */
 export default function AmenitiesScroll() {
   const [active, setActive] = useState(0);
@@ -48,7 +48,7 @@ export default function AmenitiesScroll() {
           O fim de semana <span className="accent text-teal-deep">começa no térreo</span>
         </h2>
 
-        <PhoneStory />
+        <PhonePinned />
 
         <div className="mt-16 hidden gap-16 lg:grid lg:grid-cols-2">
           <div className="sticky top-24 h-[calc(100vh-8rem)]">
@@ -80,107 +80,44 @@ export default function AmenitiesScroll() {
 }
 
 /**
- * Phones: the same pattern as the showroom. One large photo with the item's name on it, and a
- * strip of names right underneath. It advances by itself while on screen, a tap on a name or a
- * swipe on the photo takes over. Nothing is tied to the scroll, so it is always fully in view.
+ * Phones: the desktop layout stacked. The photo pins to the top of the screen and the names
+ * scroll underneath it; the name that crosses the middle of the free space lights up and takes
+ * the photo with it. A tap on a name does the same.
  */
-function PhoneStory() {
-  const box = useRef<HTMLDivElement>(null);
-  const strip = useRef<HTMLUListElement>(null);
-  const visible = useInView(box, { amount: 0.5 });
+function PhonePinned() {
   const [active, setActive] = useState(0);
-  const [auto, setAuto] = useState(true);
-  const running = auto && visible;
-
-  useEffect(() => {
-    if (!running) return;
-    const t = setTimeout(() => setActive((i) => (i + 1) % items.length), 3600);
-    return () => clearTimeout(t);
-  }, [running, active]);
-
-  useEffect(() => {
-    const el = strip.current?.querySelector<HTMLElement>("[data-on]");
-    const bar = strip.current;
-    if (!el || !bar) return;
-    bar.scrollTo({ left: el.offsetLeft - bar.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
-  }, [active]);
-
-  const go = (i: number) => {
-    setActive((i + items.length) % items.length);
-    setAuto(false);
-  };
-
   return (
-    <div ref={box} className="mt-10 min-w-0 lg:hidden">
-      <motion.div
-        className="relative h-[62svh] touch-pan-y overflow-hidden rounded-[2rem] bg-forest shadow-[0_24px_48px_-28px_rgba(15,29,12,0.55)]"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.18}
-        onDragEnd={(_, info) => {
-          if (Math.abs(info.offset.x) < 50) return;
-          go(active + (info.offset.x < 0 ? 1 : -1));
-        }}
-      >
-        <Photo active={active} sizes="100vw" />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/85 via-transparent to-transparent" />
-        <div className="absolute inset-x-4 top-4 flex gap-1.5" aria-hidden>
-          {items.map((it, i) => (
-            <span key={it.name} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/35">
-              {i < active && <span className="block h-full w-full bg-white" />}
-              {i === active && (
-                <motion.span
-                  key={`${i}-${running}`}
-                  className="block h-full origin-left bg-white"
-                  initial={{ scaleX: running ? 0 : 1 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: running ? 3.6 : 0, ease: "linear" }}
-                />
-              )}
-            </span>
-          ))}
+    <div className="mt-10 lg:hidden">
+      <div className="sticky top-0 z-10 -mx-4 bg-paper px-4 pb-3 pt-3">
+        <div className="relative h-[42svh] overflow-hidden rounded-[1.75rem] bg-forest shadow-[0_24px_48px_-28px_rgba(15,29,12,0.55)]">
+          <Photo active={active} sizes="100vw" />
+          <p className="mono absolute bottom-4 left-4 rounded-full bg-paper/90 px-3 py-1.5 text-forest">
+            {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")} · imagem ilustrativa
+          </p>
         </div>
-        <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-3 text-paper" aria-live="polite">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={items[active].name}
-              className="display text-[clamp(2.4rem,11vw,3.4rem)] leading-[0.9]"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -12, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {items[active].name}
-            </motion.p>
-          </AnimatePresence>
-          <span className="mono shrink-0 pb-1 text-paper/80">
-            {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
-          </span>
-        </div>
-      </motion.div>
-
-      <ul ref={strip} data-lenis-prevent-horizontal className="-mx-4 mt-3 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
+        <div className="pointer-events-none absolute inset-x-0 top-full h-10 bg-gradient-to-b from-paper to-transparent" aria-hidden />
+      </div>
+      <ol className="pb-[22svh] pt-6">
         {items.map((it, i) => (
-          <li key={it.name} className="shrink-0 snap-start">
-            <button
-              type="button"
-              data-on={i === active || undefined}
-              aria-pressed={i === active}
-              onClick={() => go(i)}
-              className={`rounded-full px-4 py-2.5 text-sm font-medium transition ${i === active ? "bg-forest text-paper" : "text-forest ring-1 ring-line"}`}
-            >
-              {it.name}
-            </button>
-          </li>
+          <Item key={it.name} index={i} name={it.name} active={active === i} onActive={setActive} line="-60% 0px -36% 0px" />
         ))}
-      </ul>
+      </ol>
     </div>
   );
 }
 
-function Item({ name, index, active, onActive }: { name: string; index: number; active: boolean; onActive: (i: number) => void }) {
+type ItemProps = {
+  name: string;
+  index: number;
+  active: boolean;
+  onActive: (i: number) => void;
+  /** The band of the screen where an item counts as current. */
+  line?: `${number}% 0px ${number}% 0px`;
+};
+
+function Item({ name, index, active, onActive, line = "-45% 0px -45% 0px" }: ItemProps) {
   const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  const inView = useInView(ref, { margin: line });
   useEffect(() => {
     if (inView) onActive(index);
   }, [inView, index, onActive]);
