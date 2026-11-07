@@ -92,7 +92,7 @@ function PhoneStory() {
 
   return (
     <div ref={track} className="relative mt-8 lg:hidden" style={{ height: `${items.length * 60 + 40}svh` }}>
-      <div className="sticky top-0 flex h-svh flex-col justify-center gap-4 pb-[7.5rem] pt-[4.75rem]">
+      <div className="sticky top-0 flex h-svh flex-col justify-center gap-4 pb-[7.5rem] pt-4">
         <div className="relative min-h-0 flex-1 overflow-hidden rounded-[2rem] shadow-[0_24px_48px_-28px_rgba(15,29,12,0.55)]">
           <Photo active={active} sizes="100vw" />
           <div className="absolute inset-x-4 top-4 flex gap-1.5" aria-hidden>

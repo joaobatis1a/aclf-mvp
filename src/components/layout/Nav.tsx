@@ -72,7 +72,7 @@ export default function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
+      <header className="fixed inset-x-0 top-0 z-50 hidden justify-center px-3 pt-4 lg:flex">
         <div
           className={`flex w-full items-center justify-between gap-4 rounded-full transition-all duration-500 ease-[cubic-bezier(.7,0,.2,1)] ${
             compact

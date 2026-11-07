@@ -28,7 +28,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
   return (
     <>
-      <article className="pb-20 pt-32 sm:pt-40">
+      <article className="pb-20 pt-12 lg:pt-40">
         <header className="container-x max-w-5xl">
           <Link href="/blog" className="mono text-teal-deep hover:underline">← Blog</Link>
           <p className="mono mt-8 text-ink-soft">

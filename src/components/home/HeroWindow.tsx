@@ -14,6 +14,7 @@ import {
 import { useEffect, useRef } from "react";
 import Reel from "@/components/ui/Reel";
 import YouTubeBackground from "@/components/video/YouTubeBackground";
+import { site } from "@/config/site";
 import { getProperty } from "@/data/properties";
 
 const IMAGE = "/images/properties/mirante-paineiras-01.jpg";
@@ -68,6 +69,8 @@ export default function HeroWindow() {
       className="relative h-[260vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
+        {/* Phones have no top bar (the dock is the only navigation), so the brand sits in the hero. */}
+        <Image src={site.logo} alt={site.name} width={120} height={37} priority className="absolute left-4 top-5 z-10 h-8 w-auto lg:hidden" />
 
         <motion.div style={{ opacity: hintOpacity }} className="mono absolute left-4 top-[calc(13svh+clamp(3rem,10.5vw,11rem))] mt-3 hidden max-w-[14rem] text-ink-soft sm:left-8 sm:block">
           Paulista · Recife · Caruaru

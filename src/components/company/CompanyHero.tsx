@@ -24,7 +24,7 @@ export default function CompanyHero() {
   ];
 
   return (
-    <section ref={ref} className="overflow-hidden bg-paper pb-20 pt-32 sm:pt-40">
+    <section ref={ref} className="overflow-hidden bg-paper pb-20 pt-12 lg:pt-40">
       <div className="container-x grid items-center gap-14 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <p className="mono text-teal-deep">Empresa · desde 1999</p>

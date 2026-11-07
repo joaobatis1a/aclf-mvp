@@ -47,7 +47,7 @@ function FullBleed(props: Props) {
 
   return (
     <section ref={ref} data-nav="dark" className="relative h-[92svh] min-h-[34rem] overflow-hidden bg-forest text-paper">
-      <motion.div className="absolute inset-0 [--reel-top:6.5rem]" style={{ y, scale }}>
+      <motion.div className="absolute inset-0 [--reel-top:1.25rem] lg:[--reel-top:6.5rem]" style={{ y, scale }}>
         <Reel images={props.images} video={props.video} alt={`Imagens do ${props.name}`} priority sizes="100vw" progress />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/35 to-forest/10" />
@@ -65,7 +65,7 @@ function FullBleed(props: Props) {
 
 function Arched(props: Props) {
   return (
-    <section className="bg-paper pb-16 pt-32 sm:pt-40">
+    <section className="bg-paper pb-16 pt-12 lg:pt-40">
       <div className="container-x grid items-end gap-10 lg:grid-cols-[1.5fr_1fr]">
         <div>
           <Meta {...props} light={false} />

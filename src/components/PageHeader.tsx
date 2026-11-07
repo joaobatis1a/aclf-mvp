@@ -22,7 +22,7 @@ export default function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <section className={`relative overflow-hidden bg-paper ${compact ? "pb-8 pt-32 sm:pt-36" : "pb-14 pt-36 sm:pb-20 sm:pt-44"}`}>
+    <section className={`relative overflow-hidden bg-paper ${compact ? "pb-8 pt-12 lg:pt-36" : "pb-14 pt-14 sm:pb-20 lg:pt-44"}`}>
       <div className={`container-x grid gap-10 ${image || aside ? "lg:grid-cols-[1.6fr_1fr] lg:items-end" : ""}`}>
         <div>
           <p className="mono text-teal-deep">{eyebrow}</p>
