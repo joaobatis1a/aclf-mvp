@@ -76,7 +76,7 @@ export default function Showroom() {
         </div>
 
         <div
-          className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-14"
+          className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-5 lg:mt-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-14"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
@@ -151,7 +151,7 @@ export default function Showroom() {
           </motion.div>
 
           {/* Phones: the names sit right under the stage, so picking one never scrolls it away. */}
-          <div className="order-2 -mt-3 lg:hidden">
+          <div className="order-2 min-w-0 lg:hidden">
             <ul ref={strip} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" data-lenis-prevent-horizontal>
               {list.map((p, i) => {
                 const on = p.slug === current.slug;
