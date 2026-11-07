@@ -83,38 +83,39 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
             ) : null}
           </div>
         </div>
-        <Reveal delay={0.1} className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-paper-deep">
+        <Reveal delay={0.1} className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-paper-deep lg:aspect-[4/5]">
           <Image src={secondPhoto} alt={`Imagem do ${p.name}`} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
         </Reveal>
       </section>
 
       {p.videos && p.videos.length > 0 && <VideoSection videos={p.videos} />}
 
-      {/* Leisure: the list beside a reel of the project's own images */}
+      {/* Leisure: the list beside a reel of the project's own images; on phones the reel pins above the list */}
       {p.amenities && (
         <section aria-labelledby="lazer" className="py-24 sm:py-32">
-          <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="container-x grid gap-x-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
             <div>
               <p className="mono text-teal-deep">Condomínio clube · {p.amenities.length} itens</p>
               <h2 id="lazer" className="display mt-5 text-[clamp(2.8rem,6vw,6rem)] text-forest">
                 Lazer <span className="accent text-teal-deep">sem sair de casa</span>
               </h2>
-              <ul className="mt-10 border-t border-line">
-                {p.amenities.map((a, i) => (
-                  <Reveal as="li" key={a} delay={Math.min(i, 8) * 0.03} className="flex items-center justify-between gap-4 border-b border-line py-4">
-                    <span className="display-soft text-[clamp(1.3rem,2vw,1.8rem)] text-forest">{a}</span>
-                    <span className="size-2 shrink-0 rounded-full bg-teal" aria-hidden />
-                  </Reveal>
-                ))}
-              </ul>
             </div>
             {shots.length > 1 && (
-              <div className="sticky top-4 z-10 order-first h-[40svh] lg:order-none lg:top-28 lg:h-[calc(100vh-9rem)] lg:self-start">
-                <div className="relative h-full overflow-hidden rounded-[2rem]">
+              <div className="sticky top-0 z-10 -mx-4 mt-8 bg-paper px-4 py-3 lg:top-28 lg:row-span-2 lg:mx-0 lg:mt-0 lg:self-start lg:p-0">
+                <div className="relative h-[40svh] overflow-hidden rounded-[1.75rem] shadow-[0_24px_48px_-28px_rgba(15,29,12,0.55)] lg:h-[calc(100vh-9rem)] lg:rounded-[2rem] lg:shadow-none">
                   <Reel images={[...(p.gallery ?? shots)].slice(0, 8)} alt={`Áreas do ${p.name}`} sizes="(min-width: 1024px) 45vw, 100vw" shot={2600} progress />
                 </div>
+                <div className="pointer-events-none absolute inset-x-0 top-full h-8 bg-gradient-to-b from-paper to-transparent lg:hidden" aria-hidden />
               </div>
             )}
+            <ul className="mt-6 border-t border-line lg:mt-10 lg:self-start">
+              {p.amenities.map((a, i) => (
+                <Reveal as="li" key={a} delay={Math.min(i, 8) * 0.03} className="flex items-center justify-between gap-4 border-b border-line py-4">
+                  <span className="display-soft text-[clamp(1.5rem,2vw,1.8rem)] text-forest">{a}</span>
+                  <span className="size-2 shrink-0 rounded-full bg-teal" aria-hidden />
+                </Reveal>
+              ))}
+            </ul>
           </div>
         </section>
       )}
@@ -128,7 +129,8 @@ export default async function PropertyPage({ params }: PageProps<"/imovel/[slug]
                 Por dentro <span className="accent text-teal-deep">e por fora</span>
               </h2>
             </div>
-            <p className="max-w-xs text-ink-soft">Passe o mouse para pausar. Toque em uma foto para ampliar.</p>
+            <p className="hidden max-w-xs text-ink-soft lg:block">Passe o mouse para pausar. Clique em uma foto para ampliar.</p>
+            <p className="text-ink-soft lg:hidden">Toque numa foto para ampliar e deslize para ver as outras.</p>
           </div>
           <Gallery images={p.gallery} name={p.name} />
         </section>
