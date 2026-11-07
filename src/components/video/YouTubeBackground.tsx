@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 type YTPlayer = {
   mute: () => void;
@@ -10,6 +10,7 @@ type YTPlayer = {
   getCurrentTime: () => number;
   getDuration: () => number;
   getPlayerState: () => number;
+  pauseVideo: () => void;
   destroy: () => void;
 };
 type YTNamespace = {
@@ -32,6 +33,17 @@ declare global {
 }
 
 const PLAYING = 1;
+
+// Touch screens (phones, tablets) cannot be trusted to autoplay a YouTube iframe: they stop it
+// off-screen, ask for a tap and then draw YouTube's own play button. There the reel of stills,
+// which looks the same and never depends on the player, stays on screen instead.
+const touchQuery = "(hover: none), (pointer: coarse)";
+const subscribe = (cb: () => void) => {
+  const mq = window.matchMedia(touchQuery);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const useTouch = () => useSyncExternalStore(subscribe, () => window.matchMedia(touchQuery).matches, () => true);
 
 let apiPromise: Promise<YTNamespace> | null = null;
 function loadApi() {
@@ -61,16 +73,38 @@ function loadApi() {
  */
 export default function YouTubeBackground({ id, title }: { id: string; title: string }) {
   const reduce = useReducedMotion();
+  const touch = useTouch();
+  const off = reduce || touch;
   const host = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (reduce || !host.current) return;
+    if (off || !host.current) return;
     let player: YTPlayer | null = null;
     let timer: ReturnType<typeof setInterval> | undefined;
     let cancelled = false;
     let playedSince = 0;
+    let onScreen = true;
     const mount = document.createElement("div");
+    const hostEl = host.current;
+    // Off screen or in a background tab the browser pauses the player and YouTube draws its play
+    // button; hide the film at once and only bring it back after it has played again.
+    const io = new IntersectionObserver(([e]) => {
+      onScreen = e.isIntersecting;
+      if (!onScreen) {
+        playedSince = 0;
+        setVisible(false);
+        player?.pauseVideo();
+      } else player?.playVideo();
+    });
+    io.observe(hostEl);
+    const onVisibility = () => {
+      if (document.hidden) {
+        playedSince = 0;
+        setVisible(false);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     host.current.appendChild(mount);
 
     loadApi().then((YT) => {
@@ -96,7 +130,7 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
             e.target.playVideo();
             timer = setInterval(() => {
               const p = player;
-              if (!p) return;
+              if (!p || !onScreen || document.hidden) return;
               const state = p.getPlayerState();
               const t = p.getCurrentTime();
               const d = p.getDuration();
@@ -121,13 +155,15 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
 
     return () => {
       cancelled = true;
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       if (timer) clearInterval(timer);
       player?.destroy();
       mount.remove();
     };
-  }, [id, reduce]);
+  }, [id, off]);
 
-  if (reduce) return null;
+  if (off) return null;
 
   return (
     <div
