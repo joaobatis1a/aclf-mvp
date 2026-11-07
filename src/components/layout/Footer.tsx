@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/Img";
 import Link from "next/link";
 import { site } from "@/config/site";
 import BackToTop from "./BackToTop";

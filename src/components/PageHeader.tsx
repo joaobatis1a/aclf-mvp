@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/Img";
 import { MaskText, Reveal } from "@/components/motion/Reveal";
 
 export default function PageHeader({

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/Img";
 import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useState } from "react";

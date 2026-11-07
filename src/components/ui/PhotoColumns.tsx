@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/Img";
 
 /** Two narrow columns of photos drifting vertically in opposite directions, faded at the edges. */
 export default function PhotoColumns({ images, className = "" }: { images: { src: string; alt: string }[]; className?: string }) {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/ui/Img";
 import Link from "next/link";
 import CompanyHero from "@/components/company/CompanyHero";
 import CountUp from "@/components/company/CountUp";
