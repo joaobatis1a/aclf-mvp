@@ -1,11 +1,15 @@
 "use client";
 
 import { useReducedMotion } from "motion/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type YTPlayer = {
   mute: () => void;
   playVideo: () => void;
+  seekTo: (s: number, allowSeekAhead: boolean) => void;
+  getCurrentTime: () => number;
+  getDuration: () => number;
+  getPlayerState: () => number;
   destroy: () => void;
 };
 type YTNamespace = {
@@ -15,13 +19,9 @@ type YTNamespace = {
       videoId: string;
       host?: string;
       playerVars: Record<string, string | number>;
-      events: {
-        onReady?: (e: { target: YTPlayer }) => void;
-        onStateChange?: (e: { data: number; target: YTPlayer }) => void;
-      };
+      events: { onReady?: (e: { target: YTPlayer }) => void };
     },
   ) => YTPlayer;
-  PlayerState: { PLAYING: number; ENDED: number };
 };
 
 declare global {
@@ -30,6 +30,8 @@ declare global {
     onYouTubeIframeAPIReady?: () => void;
   }
 }
+
+const PLAYING = 1;
 
 let apiPromise: Promise<YTNamespace> | null = null;
 function loadApi() {
@@ -50,21 +52,24 @@ function loadApi() {
 
 /**
  * Plays an official film muted and looping behind content, cropped to cover its frame.
- * - It only becomes visible while the video is actually playing, so YouTube's poster,
- *   title card and play button never show; if autoplay is blocked, the reel underneath stays.
- * - The player is laid out at twice the size and scaled down, which makes YouTube pick
- *   a sharper stream than it would for the visible size.
+ *
+ * YouTube draws its own interface (play button, end screen, "more videos") whenever the
+ * video is not actually running, so the film is only revealed after it has played for a
+ * moment, hidden again as soon as it stalls, and looped by hand just before the end so the
+ * end screen never appears. Whatever sits underneath (a reel of stills) is the poster and
+ * the fallback, including when the browser blocks autoplay.
  */
 export default function YouTubeBackground({ id, title }: { id: string; title: string }) {
   const reduce = useReducedMotion();
   const host = useRef<HTMLDivElement>(null);
-  const domId = useId();
-  const [playing, setPlaying] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (reduce || !host.current) return;
     let player: YTPlayer | null = null;
+    let timer: ReturnType<typeof setInterval> | undefined;
     let cancelled = false;
+    let playedSince = 0;
     const mount = document.createElement("div");
     host.current.appendChild(mount);
 
@@ -80,8 +85,7 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
           disablekb: 1,
           fs: 0,
           iv_load_policy: 3,
-          loop: 1,
-          playlist: id,
+          cc_load_policy: 0,
           modestbranding: 1,
           playsinline: 1,
           rel: 0,
@@ -90,14 +94,34 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
           onReady: (e) => {
             e.target.mute();
             e.target.playVideo();
+            timer = setInterval(() => {
+              const p = player;
+              if (!p) return;
+              const state = p.getPlayerState();
+              const t = p.getCurrentTime();
+              const d = p.getDuration();
+              // Loop by hand before YouTube's end screen can show.
+              if (d > 0 && d - t < 1.2) {
+                p.seekTo(0.1, true);
+                return;
+              }
+              if (state === PLAYING && t > 0.3) {
+                playedSince ||= Date.now();
+                if (Date.now() - playedSince > 900) setVisible(true);
+              } else {
+                playedSince = 0;
+                setVisible(false);
+                if (state !== PLAYING) p.playVideo();
+              }
+            }, 250);
           },
-          onStateChange: (e) => setPlaying(e.data === YT.PlayerState.PLAYING),
         },
       });
     });
 
     return () => {
       cancelled = true;
+      if (timer) clearInterval(timer);
       player?.destroy();
       mount.remove();
     };
@@ -106,12 +130,15 @@ export default function YouTubeBackground({ id, title }: { id: string; title: st
   if (reduce) return null;
 
   return (
-    <div aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700 ${playing ? "opacity-100" : "opacity-0"}`}>
+    <div
+      aria-hidden
+      title={title}
+      className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+    >
+      {/* Laid out at twice the size and scaled down so YouTube streams a sharper rendition. */}
       <div
         ref={host}
-        id={domId}
-        title={title}
-        className="absolute left-1/2 top-1/2 h-[max(200%,112.5vw)] w-[max(200%,355.56vh)] -translate-x-1/2 -translate-y-1/2 scale-[0.56] [&>iframe]:size-full"
+        className="absolute left-1/2 top-1/2 h-[max(200%,112.5vw)] w-[max(200%,355.56vh)] -translate-x-1/2 -translate-y-1/2 scale-[0.58] [&>iframe]:size-full"
       />
     </div>
   );
