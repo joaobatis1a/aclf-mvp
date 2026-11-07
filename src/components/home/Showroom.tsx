@@ -75,7 +75,17 @@ export default function Showroom() {
           onBlur={() => setPaused(false)}
         >
           {/* Stage */}
-          <div className="relative order-1 aspect-[4/5] overflow-hidden rounded-[2rem] bg-forest-2 sm:aspect-[16/11] lg:order-2 lg:aspect-auto lg:min-h-[72vh]">
+          <motion.div
+            className="relative order-1 aspect-[4/5] touch-pan-y overflow-hidden rounded-[2rem] bg-forest-2 sm:aspect-[16/11] lg:order-2 lg:aspect-auto lg:min-h-[72vh]"
+            // Swipe sideways on the stage to move between projects, like a story.
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, info) => {
+              if (Math.abs(info.offset.x) < 50) return;
+              pick((index + (info.offset.x < 0 ? 1 : -1) + list.length) % list.length);
+            }}
+          >
             <AnimatePresence initial={false}>
               <motion.div
                 key={current.slug}
@@ -130,7 +140,11 @@ export default function Showroom() {
                 </motion.div>
               </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
+
+          <p className="mono order-1 -mt-4 text-center text-paper/50 lg:hidden" aria-hidden>
+            ← deslize para trocar →
+          </p>
 
           {/* List */}
           <ol className="order-2 flex flex-col justify-center lg:order-1">
