@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Reel from "@/components/ui/Reel";
 import { useVideo } from "@/components/video/VideoPlayer";
-import { phaseDot, phaseLabel, properties, shotsOf, specList, type Phase } from "@/data/properties";
+import { phaseDot, phaseLabel, properties, shotsOf, specList, type Phase, type Property } from "@/data/properties";
 
 const PHASES: Phase[] = ["lancamento", "em-construcao", "pronto-para-morar"];
 const INTERVAL = 6500;
@@ -13,6 +14,7 @@ const INTERVAL = 6500;
 /**
  * Showroom: the project list on one side, a large stage on the other.
  * The stage advances on its own while visible and stops for good once the visitor picks a project.
+ * Phones get the same list in the same type, and the chosen name opens into its own stage (PhoneList).
  */
 export default function Showroom() {
   const reduce = useReducedMotion();
@@ -37,21 +39,13 @@ export default function Showroom() {
     return () => clearTimeout(t);
   }, [running, index, list.length]);
 
-  const strip = useRef<HTMLUListElement>(null);
-  useEffect(() => {
-    const el = strip.current?.querySelector<HTMLElement>("[data-on]");
-    const box = strip.current;
-    if (!el || !box) return;
-    box.scrollTo({ left: el.offsetLeft - box.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
-  }, [index, phase]);
-
   const pick = (i: number) => {
     setIndex(i);
     setAuto(false);
   };
 
   const chip = (on: boolean) =>
-    `rounded-full px-4 py-2 text-sm font-medium transition ${on ? "bg-paper text-forest" : "text-paper/70 ring-1 ring-line-inv hover:text-paper"}`;
+    `shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${on ? "bg-paper text-forest" : "text-paper/70 ring-1 ring-line-inv hover:text-paper"}`;
 
   return (
     <section ref={ref} aria-labelledby="vitrine" className="bg-forest py-24 text-paper sm:py-32">
@@ -63,7 +57,7 @@ export default function Showroom() {
               Escolha sua <span className="accent text-paineira">próxima</span> vista
             </h2>
           </div>
-          <div role="group" aria-label="Filtrar por fase" className="flex flex-wrap gap-2">
+          <div role="group" aria-label="Filtrar por fase" data-lenis-prevent-horizontal className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:w-auto sm:flex-wrap sm:px-0">
             <button type="button" className={chip(phase === "all")} aria-pressed={phase === "all"} onClick={() => { setPhase("all"); setIndex(0); }}>
               Todos
             </button>
@@ -76,7 +70,7 @@ export default function Showroom() {
         </div>
 
         <div
-          className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-5 lg:mt-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-14"
+          className="mt-14 hidden lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-14"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
@@ -84,7 +78,7 @@ export default function Showroom() {
         >
           {/* Stage */}
           <motion.div
-            className="relative order-1 h-[58svh] touch-pan-y overflow-hidden rounded-[2rem] bg-forest-2 sm:h-auto sm:aspect-[16/11] lg:order-2 lg:aspect-auto lg:min-h-[72vh]"
+            className="relative order-2 min-h-[72vh] touch-pan-y overflow-hidden rounded-[2rem] bg-forest-2"
             // Swipe sideways on the stage to move between projects, like a story.
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -150,44 +144,8 @@ export default function Showroom() {
             </div>
           </motion.div>
 
-          {/* Phones: the names sit right under the stage, so picking one never scrolls it away. */}
-          <div className="order-2 min-w-0 lg:hidden">
-            <ul ref={strip} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" data-lenis-prevent-horizontal>
-              {list.map((p, i) => {
-                const on = p.slug === current.slug;
-                return (
-                  <li key={p.slug} className="shrink-0 snap-start">
-                    <button
-                      type="button"
-                      data-on={on || undefined}
-                      onClick={() => pick(i)}
-                      aria-pressed={on}
-                      className={`relative flex items-center gap-2 overflow-hidden rounded-full px-4 py-2.5 text-sm font-medium transition ${on ? "bg-paper text-forest" : "text-paper/70 ring-1 ring-line-inv"}`}
-                    >
-                      <span className={`size-1.5 rounded-full ${phaseDot[p.phase]}`} aria-hidden />
-                      {p.name}
-                      {on && running && (
-                        <motion.span
-                          key={`${p.slug}-${index}-m`}
-                          aria-hidden
-                          className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-paineira"
-                          initial={{ scaleX: 0 }}
-                          animate={{ scaleX: 1 }}
-                          transition={{ duration: INTERVAL / 1000, ease: "linear" }}
-                        />
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="mono mt-3 text-center text-paper/45" aria-hidden>
-              toque num nome ou deslize a foto
-            </p>
-          </div>
-
           {/* List */}
-          <ol className="order-3 hidden flex-col justify-center lg:order-1 lg:flex">
+          <ol className="order-1 flex flex-col justify-center">
             {list.map((p, i) => {
               const on = p.slug === current.slug;
               return (
@@ -224,7 +182,138 @@ export default function Showroom() {
             </li>
           </ol>
         </div>
+
+        <PhoneList key={phase} list={list} />
       </div>
     </section>
+  );
+}
+
+/**
+ * Phones: the desktop list, one name per row, and the open row unfolds into the stage right
+ * under its name. Opening a row closes the previous one; while both animate, the scroll is held
+ * so the name you tapped stays under your finger, then a row tapped low is brought up.
+ */
+function PhoneList({ list }: { list: Property[] }) {
+  const lenis = useLenis();
+  const [open, setOpen] = useState(0);
+  const rows = useRef<(HTMLLIElement | null)[]>([]);
+  const hold = useRef<{ i: number; top: number } | null>(null);
+
+  const toggle = (i: number) => {
+    const el = rows.current[i];
+    if (el) hold.current = { i, top: el.getBoundingClientRect().top };
+    setOpen((o) => (o === i ? -1 : i));
+  };
+
+  useEffect(() => {
+    const h = hold.current;
+    const el = h && rows.current[h.i];
+    hold.current = null;
+    if (!h || !el) return;
+    const opened = open === h.i;
+    let raf = 0;
+    let start = -1;
+    const tick = (now: number) => {
+      if (start < 0) start = now;
+      const shift = el.getBoundingClientRect().top - h.top;
+      if (Math.abs(shift) > 0.5) {
+        if (lenis) lenis.scrollTo(lenis.scroll + shift, { immediate: true, force: true });
+        else window.scrollBy(0, shift);
+      }
+      if (now - start < 700) raf = requestAnimationFrame(tick);
+      else if (opened && h.top > window.innerHeight * 0.35) {
+        if (lenis) lenis.scrollTo(el, { offset: -16, duration: 0.8 });
+        else el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [open, lenis]);
+
+  return (
+    <div className="mt-10 lg:hidden">
+      <ol className="border-t border-line-inv">
+        {list.map((p, i) => {
+          const on = open === i;
+          return (
+            <li key={p.slug} ref={(el) => { rows.current[i] = el; }} className="border-b border-line-inv">
+              <button type="button" onClick={() => toggle(i)} aria-expanded={on} className="flex w-full items-center gap-3 py-4 text-left">
+                <span className={`size-2 shrink-0 rounded-full ${phaseDot[p.phase]}`} aria-hidden />
+                <span className={`display-soft min-w-0 flex-1 text-[1.65rem] leading-[1.05] transition duration-300 ${on ? "text-paper" : "text-paper/45"}`}>{p.name}</span>
+                <span className="mono shrink-0 text-paper/50">{p.areaLabel}</span>
+                <span aria-hidden className={`grid size-8 shrink-0 place-items-center rounded-full ring-1 transition duration-300 ${on ? "rotate-45 bg-paper text-forest ring-paper" : "text-paper/70 ring-line-inv"}`}>
+                  <svg viewBox="0 0 16 16" className="size-3.5"><path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+                </span>
+              </button>
+              <AnimatePresence initial={false}>
+                {on && <PhoneStage key={p.slug} p={p} />}
+              </AnimatePresence>
+            </li>
+          );
+        })}
+      </ol>
+      <Link href="/empreendimentos" className="mono mt-6 inline-block text-paper/70 underline underline-offset-4">
+        Ver todos, inclusive os entregues →
+      </Link>
+    </div>
+  );
+}
+
+const unfold = {
+  closed: { height: 0, opacity: 0, transition: { duration: 0.5, ease: [0.7, 0, 0.2, 1] as const } },
+  open: { height: "auto", opacity: 1, transition: { duration: 0.6, ease: [0.7, 0, 0.2, 1] as const } },
+};
+
+function PhoneStage({ p }: { p: Property }) {
+  const playVideo = useVideo();
+  const ref = useRef<HTMLDivElement>(null);
+  const visible = useInView(ref, { amount: 0.3 });
+  const film = p.videos?.find((v) => v.kind === "filme") ?? p.videos?.[0];
+
+  return (
+    <motion.div variants={unfold} initial="closed" animate="open" exit="closed" className="overflow-hidden">
+      <div ref={ref} className="pb-5">
+        <motion.div
+          className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-forest-2"
+          initial={{ clipPath: "inset(0 0 100% 0 round 1.75rem)" }}
+          animate={{ clipPath: "inset(0 0 0% 0 round 1.75rem)" }}
+          transition={{ duration: 0.9, ease: [0.7, 0, 0.2, 1] }}
+        >
+          <Reel images={shotsOf(p, 4)} video={p.video} alt={`Imagens do ${p.name}`} sizes="100vw" shot={2300} playing={visible} progress />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/10 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-5">
+            <p className="mono flex items-center gap-2 text-paper/80">
+              {phaseLabel[p.phase]}
+              {p.city && <span>· {p.city}</span>}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {specList(p)
+                .filter((s) => s.k !== "Cidade")
+                .map((s) => (
+                  <span key={s.k} className="rounded-full bg-paper/12 px-3.5 py-1.5 text-sm ring-1 ring-white/15 backdrop-blur-md">
+                    {s.v} {s.k === "Área" ? "" : s.k.toLowerCase()}
+                  </span>
+                ))}
+            </div>
+          </div>
+        </motion.div>
+        <div className="mt-3 flex gap-2">
+          <Link href={`/imovel/${p.slug}`} className="flex flex-1 items-center justify-center gap-2 rounded-full bg-paper px-6 py-3.5 text-sm font-semibold text-forest active:bg-paineira">
+            Ver o empreendimento <span aria-hidden>→</span>
+          </Link>
+          {film && (
+            <button
+              type="button"
+              onClick={() => playVideo(film)}
+              aria-label={`${film.kind === "filme" ? "Assistir o filme" : "Ver a obra"} do ${p.name}`}
+              className="grid size-12 shrink-0 place-items-center rounded-full ring-1 ring-white/40 active:bg-paper active:text-forest"
+            >
+              <svg viewBox="0 0 24 24" className="size-4" aria-hidden><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg>
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 }
