@@ -14,6 +14,15 @@ const seals = [
   { name: "Casa Azul + Caixa", note: "Sustentabilidade, graus Safira e Topázio" },
 ];
 
+const photos = [
+  { src: "/images/company/award-master.jpg", alt: "" },
+  { src: "/images/company/award-esg.jpg", alt: "" },
+  { src: "/images/company/story.jpg", alt: "" },
+  { src: "/images/company/award-mcmv.jpg", alt: "" },
+  { src: "/images/company/award-coop.jpg", alt: "" },
+  { src: "/images/company/award-incontec.jpg", alt: "" },
+];
+
 export default function Recognition() {
   const [active, setActive] = useState(0);
 
@@ -34,17 +43,18 @@ export default function Recognition() {
             Na maior premiação do mercado imobiliário pernambucano, o Mirante do Frio Residence levou o Troféu Master, o principal prêmio da noite. Vieram junto mais quatro.
           </p>
         </div>
-        <PhotoColumns
-          className="hidden h-[30rem] self-center lg:flex"
-          images={[
-            { src: "/images/company/award-master.jpg", alt: "" },
-            { src: "/images/company/award-esg.jpg", alt: "" },
-            { src: "/images/company/story.jpg", alt: "" },
-            { src: "/images/company/award-mcmv.jpg", alt: "" },
-            { src: "/images/company/award-coop.jpg", alt: "" },
-            { src: "/images/company/award-incontec.jpg", alt: "" },
-          ]}
-        />
+        <PhotoColumns className="hidden h-[30rem] self-center lg:flex" images={photos} />
+      </div>
+
+      {/* Phones: the drifting photos become a belt under the title. */}
+      <div aria-hidden className="relative mt-10 overflow-hidden lg:hidden">
+        <div className="marquee flex w-max gap-3" style={{ animationDuration: "28s" }}>
+          {[...photos, ...photos].map((p, i) => (
+            <div key={i} className="relative aspect-[3/4] w-32 shrink-0 overflow-hidden rounded-[1.25rem]">
+              <Image src={p.src} alt="" fill sizes="8rem" className="object-cover" />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Expanding panels: the open one shows the story, the others stay as labelled strips. */}
